@@ -1,0 +1,53 @@
+Get current info
+================================================
+{  
+    "login":{  
+        "user":"<apiusername>",
+        "pass":"<apipassword>",
+        "app_pass":"<metapassword>",
+        "source":"meta_ru",
+        "action":"get_last_position"
+    },
+    "data":[  
+        {  
+            "vehicle_plate":"<plate_no>"
+        }
+    ]
+}
+
+
+Get history step 1
+================================================
+{  
+    "login":{  
+        "user":"<apiusername>",
+        "pass":"<apipassword>",
+        "app_pass":"<metapassword>",
+        "source":"meta_ru",
+        "action":"gen_position_history"
+    },
+    "data":[  
+        {  
+            "vehicle_plate":"<plate_no>"
+        }
+    ]
+}
+
+
+Get history step 2
+================================================
+{  
+    "login":{  
+        "user":"<apiusername>",
+        "pass":"<apipassword>",
+        "app_pass":"<metapassword>",
+        "source":"meta_ru",
+        "action":"get_position_history"
+    },
+    "data":[  
+        {  
+            "vehicle_plate":"<plate_no>",
+            "reportid":"<report_id>"
+        }
+    ]
+}

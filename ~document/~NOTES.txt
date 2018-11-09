@@ -1,0 +1,69 @@
+Glosari:
+==========================================
+GMC			- Games Medical Center
+GDU			- Games Dispatch Unit
+AMS			- Athelet Medical Support
+AMB			- Ambulance
+BLS				- Basic Life Support
+ALS				- Advance Life Support
+Resource	- AMS, AMB, BLS, ALS
+Responder	- Resources which has been assigned to a Callcard
+
+
+Login:
+==========================================
+AWS IP						onecc.ansi.com.my
+Folder							/var/www/html
+OS Username			root
+OS Password				(guna key attached 1cclinux.ppk)
+MySQL Username		admin
+MySQL Password		Xs2admin_2017
+
+
+Others:
+==========================================
+Zul Map:	http://52.76.166.8/epdrm/login.php?
+
+BNN6796
+W762H
+BLQ2098
+BMH2991
+BNL7061
+BNM3746
+BMG592 - gunakan ABC123
+
+CREATE USER 'onecc'@'localhost' IDENTIFIED BY 'SeaGames_2017';
+GRANT SELECT ON onecc.venue TO onecc@localhost IDENTIFIED BY 'SeaGames_2017';
+GRANT INSERT ON onecc.venue TO onecc@localhost IDENTIFIED BY 'SeaGames_2017';
+GRANT UPDATE ON onecc.venue TO onecc@localhost IDENTIFIED BY 'SeaGames_2017';
+GRANT DELETE ON onecc.venue TO onecc@localhost IDENTIFIED BY 'SeaGames_2017';
+UPDATE user SET user_fullname = UPPER(user_fullname), user_password = '202cb962ac59075b964b07152d234b70'
+
+
+============================================================================================ Whatsapp
+*Please clear your cache for W1CC*
+
+W1CC v1.5.11 has been release:
+http://onecc.ansi.com.my
+
+M1CC v1.2.7 has been release:
+http://onecc.ansi.com.my/onecc.apk
+
+Change Log:
+http://onecc.ansi.com.my/changelog
+============================================================================================ Whatsapp
+
+
+*Login MySQL:*
+Host: onecc.ansi.com.my
+User: admin
+Password: Xs2admin_2017
+
+*Tables:*
+To modify venue list: venue
+To delete callcard: callcard
+To add user: user
+Deployment plan saved in: resource
+
+*Notes:*
+As far I was concern, semua bugs and requests dari meeting lepas should be in this release

@@ -1,0 +1,574 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<title>1CC Mobile</title>
+		<link rel="stylesheet" href="lib/materialize-v0.98.2/css/materialize.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="css/custom.css">
+	</head>
+
+	<body>
+		<div class="pgSignup">
+			<img src="img/background.png" class="background">
+			<img src="img/background.png" class="background">
+			<img src="img/sponsor1.svg" class="sponsor">
+			<div class="footer">Sponsored by: Telekom Malaysia Berhad | ANSI Systems Sdn Bhd</div>
+
+			<div class="loginContainer">
+				<img src="img/logo_1cc.svg" class="logo">
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="phone" type="text">
+						<label for="phone">Enter Your Phone Number</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input id="nric" type="text">
+						<label for="nric">Enter Your NRIC</label>
+					</div>
+				</div>
+				<div class="row">
+					<a class="btn pink fullwidth" onclick="signin()">SIGN IN</a>
+				</div>
+			</div>
+		</div>
+		<div class="pgCallcard">
+		
+			<nav>
+				<div class="nav-wrapper">
+					<a class="brand-logo left">
+						<i class="material-icons" id="btnBack" onclick="closeGallery()" style="display:none;">keyboard_arrow_left</i>
+						<img src="img/logo_1cc_white.svg" class="navlogo">
+						<span id="gallery_id" style="display:none;"></span>
+					</a>
+					<ul class="right">
+						<li><a data-activates="slide-out" class="button-collapse"><i class="material-icons">more_vert</i></a></li>  
+					</ul>
+				</div>
+			</nav>
+			
+			<ul id="slide-out" class="side-nav">
+				<li>
+					<div class="menu_background">
+						<div class="name white-text" id="username">Si Pulan</div>
+						<div class="email white-text" id="userphone">xxx xxxxxxx</div>
+					</div>
+				</li>
+				<li><a onclick="switchUser()"><i class="material-icons">https</i>SIGN OUT</a></li>
+				<li id="mobileVersion">v1.2.0</li>
+			</ul>
+			
+			<div class="carousel"></div>
+			<img class="nocallcard" src="img/nocallcard.svg" style="display:none;">
+			
+			<div class="gallery" style="display:none;"></div>
+			
+			<img id="photoCaptured" src="" onload="photoCapturedLoaded()" style="display:none;">
+			
+		</div>
+		
+		<!--====================================================================================================Modal Waiting-->
+		<div id="modal_waiting" class="modal">
+			<div class="progress">
+				<div class="indeterminate"></div>
+			</div>
+			Please wait...
+		</div>
+		
+		<!--====================================================================================================Modal Simple-->
+		<div id="modal_simple" class="modal"></div>
+		
+		<!--====================================================================================================Modal Warning-->
+		<div id="modal_warning" class="modal red white-text"></div>
+		
+		<!--====================================================================================================Modal Software Update-->
+		<div id="modal_update_software" class="modal red white-text"></div>
+		
+		<!--====================================================================================================Modal Rollback Status-->
+		<div id="modal_rollback_status" class="modal modal-confirm red white-text">
+			<form class="row">
+				<div class="col s12">
+					Are you sure to rollback this status?
+				</div>
+			</form>
+			<div class="modal-footer red">
+				<a href="javascript:;" class="modal-action modal-close btn-flat white-text" onclick="updateStatusProceed()">Yes</a>
+				<a href="javascript:;" class="modal-action modal-close btn-flat white-text" onclick="updateStatusCancel()">Cancel</a>
+			</div>
+		</div>
+		
+
+		<!--
+		-->
+		<script type="text/javascript" src="cordova.js"></script>
+		<script src='lib/jquery.min.js'></script>
+		<script src="lib/materialize-v0.98.2/js/materialize.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+		
+		<script>
+			// Initialize Firebase
+			var config = {
+				apiKey: "AIzaSyDLEqpyMeN74anGWtsV_93grGn5c3VKe1E",
+				authDomain: "sea-games.firebaseapp.com",
+				databaseURL: "https://sea-games.firebaseio.com",
+				projectId: "sea-games",
+				storageBucket: "sea-games.appspot.com",
+				messagingSenderId: "208616034779"
+			};
+			firebase.initializeApp(config);
+		</script>
+
+
+		<script>
+			//var URL = 'http://54.255.152.73/';
+			var URL = 'http://192.168.1.67:8080/1CC/';
+			
+			var LS_NRIC = localStorage.getItem('1cc_nric');
+			var LS_MOBILEVERSION = localStorage.getItem('1cc_mobileversion');
+			var STATUS_TYPE = '';
+			var fireEvent = firebase.database().ref('fireEvent');
+			var fireMobileVersion = firebase.database().ref('fireMobileVersion');
+			var cameraOptions;
+			
+			if(LS_MOBILEVERSION==null) LS_MOBILEVERSION = 'v1.2.0'; //nie kena sentiasa sama ngan firebase latest version	
+
+			$(document).ready(function(){
+				$('.modal').modal();
+				$('#modal_waiting').modal({dismissible:false});
+				$('#modal_update_software').modal({dismissible:false});
+				
+				fireMobileVersion.on('value', function(version) {
+					if(LS_MOBILEVERSION!=version.val()) updateSoftware(version.val());
+					else {
+						if(window.cordova) document.addEventListener("deviceready", onDeviceReady, false);
+						
+						if(LS_NRIC==null) {
+							$('.pgSignup, .pgCallcard').toggle();
+						}
+						else {
+							getStatusType();
+						}					
+					}
+				});
+				
+				function updateSoftware(version) {
+					$('#modal_update_software').text('An update('+version+') is available for your 1CC. Please exit and download the latest version.').modal('open');
+				}
+
+				$('.button-collapse').sideNav({
+					menuWidth: 300, // Default is 300
+					edge: 'right', // Choose the horizontal origin
+					closeOnClick: true
+				});
+			});
+			
+			function getStatusType() {
+				$.getJSON(URL+"api/mobile_getStatusType.php", function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						var h = '';
+						for(var i in data.data) h += '<option value="'+data.data[i].statustype_code+'" order="'+data.data[i].statustype_order+'" '+data.data[i].statustype_on_mobile+'>'+data.data[i].statustype_desc+'</option>';
+						STATUS_TYPE = '<select>'+h+'</select>';
+						
+						getCallcard();
+					}
+				});
+			}
+			
+			function signin() {
+				$('#phone').val($('#phone').val().replace(/\+|-| /g,''));
+				$('#nric').val($('#nric').val().replace(/\+|-| /g,''));
+
+				if($('#phone').val().length!=10 && $('#nric').val().length!=12) {
+					$('#modal_warning').text('Invalid phone number and NRIC').modal('open');
+				}
+				else if($('#phone').val().length!=10) {
+					$('#modal_warning').text('Invalid phone number').modal('open');
+				}
+				else if($('#nric').val().length!=12) {
+					$('#modal_warning').text('Invalid NRIC').modal('open');
+				}
+				else {
+					$('#modal_waiting').modal('open');
+					$.getJSON(URL+"api/mobile_setRegistration.php?phone="+$('#phone').val()+"&nric="+$('#nric').val()+"&token="+localStorage.getItem('1cc_token'), function(data) {
+						if(data.status!='ok') {
+							$('#modal_waiting').modal('close');
+							$('#modal_warning').text(data.status).modal('open');
+						}
+						else {
+							localStorage.setItem('1cc_nric', $('#nric').val());
+							LS_NRIC = localStorage.getItem('1cc_nric');
+							
+							$('#modal_waiting').modal('close');
+							$('.pgSignup, .pgCallcard').toggle();
+							getStatusType();
+						}
+					});
+				}
+			}
+
+			function onDeviceReady() {
+				MobileAccessibility.usePreferredTextZoom(false);
+				
+				FCMPlugin.getToken(function(token){ localStorage.setItem('1cc_token', token); });
+				FCMPlugin.onTokenRefresh(function(token){ localStorage.setItem('1cc_token', token); });
+				FCMPlugin.onNotification(function(data){ $('#modal_simple').text(data.title).modal('open'); getCallcard(); });
+				
+				cameraOptions = {
+					sourceType: Camera.PictureSourceType.CAMERA,
+					allowEdit: false,
+					correctOrientation: true
+				}
+
+				document.addEventListener("backbutton", function(e){
+					if($('.gallery:visible').size()==1) {
+						e.preventDefault();
+						closeGallery();
+					}
+					else {
+						navigator.app.exitApp();
+					}
+				});
+			}
+			
+			function switchUser() {
+				localStorage.removeItem("1cc_nric");
+				LS_NRIC = localStorage.getItem('1cc_nric');
+				$('.pgSignup, .pgCallcard').toggle();
+			}
+			
+			function getCallcard() {
+				$.getJSON(URL+"api/mobile_getCallcard.php?nric="+LS_NRIC, function(data) {
+					if(data.status!='ok') {
+						$('#modal_warning').text(data.status).modal('open');
+					}
+					else {
+						$('#username').text(data.name.toLowerCase());
+						$('#userphone').text(data.phone.toLowerCase());
+						
+						var h = '';
+						for(var i in data.data) h +=
+							'<div class="carousel-item '+data.data[i].callcard_status+'">'+
+								'<div class="callcard_title">Callcard '+data.data[i].callcard_id+'</div>'+
+								
+								'<div class="callcard_label">Patient Name</div><div class="callcard_value">'+data.data[i].callcard_patient_name+'</div>'+
+								'<div class="callcard_label">Patient Type</div><div class="callcard_value">'+data.data[i].patienttype_desc+'</div>'+
+								'<div class="callcard_label">Incident Address</div><div class="callcard_value">'+data.data[i].callcard_incident_address+'</div>'+
+								'<div class="callcard_label">Caller Name</div><div class="callcard_value">'+data.data[i].callcard_caller_name+'</div>'+
+								'<div class="callcard_label">Caller Phone</div><div class="callcard_value">'+data.data[i].callcard_caller_phone+'</div>'+
+								
+								'<div class="callcard_label">Responder Status</div><div class="callcard_value">'+
+									STATUS_TYPE
+										.replace('<select', '<select onchange="updateStatus(\''+data.data[i].responder_id+'\')" callcard_id="'+data.data[i].callcard_id+'" responder_id="'+data.data[i].responder_id+'" prev_statustype_code="'+data.data[i].responder_statustype_code+'" prev_statustype_order="'+data.data[i].statustype_order+'" '+(data.data[i].responder_statustype_code=='completed'?'disabled':''))
+										.replace('option value="'+data.data[i].responder_statustype_code+'"', 'option value="'+data.data[i].responder_statustype_code+'" selected')+
+								'</div>'+
+
+								'<div class="left">'+
+									'<a onclick="openChat(\''+data.data[i].callcard_id+'\')"><i class="material-icons">question_answer</i></a>'+
+									'<a onclick="openGallery(\''+data.data[i].responder_id+'\', \''+data.data[i].callcard_id+'\')"><i class="material-icons">photo</i></a>'+
+								'</div>'+
+								'<div class="right">'+
+									'<a href="tel:'+data.data[i].callcard_caller_phone+'"><i class="material-icons">local_phone</i></a>'+
+									'<a href="geo:'+data.data[i].callcard_incident_coordinate+'"><i class="material-icons">map</i></a>'+
+								'</div>'+
+							'</div>';
+						$('.carousel').removeClass('initialized').html(h);
+						$('.carousel').carousel({
+							fullWidth: true,
+							dist: 0,
+							shift: 15,
+							padding: 15,
+							indicators: true,
+							noWrap: true
+						});
+						$('select').material_select();
+
+						if(h=='') {
+							$('.carousel').hide();
+							$('.nocallcard').show();
+						}
+						else {
+							$('.carousel').show();
+							$('.nocallcard').hide();
+						}
+						
+						//============================================================================= cordova-background-geolocation-lt Start
+						/*
+						var bgGeo = window.BackgroundGeolocation;
+						
+						var bgGeoCallbackFn = function(location, taskId) {
+							console.log('Location: '+location.coords.latitude+','+location.coords.longitude);
+							bgGeo.finish(taskId);
+						};
+						
+						var bgGeoFailureFn = function(errorCode) {
+							$('#modal_warning').text(errorCode).modal('open');
+						}
+						
+						bgGeo.on('location', bgGeoCallbackFn, bgGeoFailureFn);
+						
+						bgGeo.configure({
+							desiredAccuracy: 0,
+							distanceFilter: 0,
+							locationUpdateInterval: 30000,
+							stationaryRadius: 25,
+							activityRecognitionInterval: 10000,
+							stopTimeout: 5,
+							debug: false,  //Debug sounds & notifications.
+							stopOnTerminate: false,
+							startOnBoot: true,
+							
+										// HTTP / SQLite config
+										url: URL+"api/mobile_setResponderLocation.php",
+										httpTimeout: 5000,
+										method: "POST",
+										autoSync: true,
+										maxDaysToPersist: 1,
+										maxRecordsToPersist: 0,
+										notificationTitle: 'Location tracking enabled',
+										headers: {  //Optional HTTP headers
+											"X-FOO": "bar"
+										},
+										params: {   //Optional HTTP params
+											"nric": LS_NRIC
+										}
+							
+						}, function(state) {
+							// This callback is executed when the plugin is ready to use.
+							if (!state.enabled) {
+								bgGeo.start();
+							}
+						});
+						*/
+						//============================================================================= cordova-background-geolocation-lt End
+						//============================================================================= cordova-plugin-mauron85-background-geolocation Start
+						/*
+						backgroundGeolocation = window.backgroundGeolocation || window.universalGeolocation;
+						
+						backgroundGeolocation.getLocations(function(locs) {
+							//do nothing
+						});
+						
+						var backgroundGeolocationCallback = function(location) {
+							$.ajax({
+								type: "POST",
+								dataType: "json",
+								url: URL+"api/mobile_setResponderLocation.php",
+								data: {
+									"location": {
+										"coords": {
+											"latitude": location.latitude,
+											"longitude": location.longitude
+										}
+									},
+									"nric": localStorage.getItem('1cc_nric')
+								},
+								success: function(data){
+									console.log('response from server');
+									console.log(data);
+								}
+							});
+							backgroundGeolocation.finish();
+						};
+
+						backgroundGeolocation.configure(backgroundGeolocationCallback, null, {
+							desiredAccuracy: 0,
+							stationaryRadius: 0,
+							distanceFilter: 0,
+							interval: 30000,
+							stopOnTerminate: false,
+							startOnBoot: true,
+							startForeground: true,
+							notificationTitle: 'Location tracking',
+							notificationText: 'Enabled',
+							maxLocations: 1
+
+										url: URL+"api/mobile_setResponderLocation.php?nric="+'back_'+localStorage.getItem('1cc_nric'),
+										httpTimeout: 5000,
+										method: "POST",
+										autoSync: false,
+										maxDaysToPersist: 1,
+										maxRecordsToPersist: 0,
+										headers: {  //Optional HTTP headers
+											"X-FOO": "bar"
+										},
+										params: {   //Optional HTTP params
+											"nric2": "nric2"
+										}
+							
+						});
+
+						backgroundGeolocation.start();
+						*/
+						//============================================================================= cordova-plugin-mauron85-background-geolocation End
+						//============================================================================= cordova-plugin-geolocation Start
+						setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationCallback, geolocationError); }, 60000);
+
+						var geolocationCallback = function(position) {
+							$.ajax({
+								type: "POST",
+								dataType: "json",
+								url: URL+"api/mobile_setResponderLocation.php",
+								data: {
+									"location": {
+										"coords": {
+											"latitude": position.coords.latitude,
+											"longitude": position.coords.longitude
+										}
+									},
+									"tracking_resource_nric_or_reg": localStorage.getItem('1cc_nric')
+								}
+							});
+						};
+
+						function geolocationError(error) {
+							$('#modal_warning').text(error.message).modal('open');
+						}
+
+						//============================================================================= cordova-plugin-geolocation Start
+					}
+				});
+			}
+			
+			function dialNumber(tel) {
+				window.open('tel:'+tel, '_system');
+			}
+			
+			function openMap(coordinate) {
+				window.open('geo:'+coordinate, '_system');
+			}
+
+			//========================================================================================================================= Update Status Start
+			var updateStatus_Target;
+			function updateStatus(responder_id) {
+				updateStatus_Target = $('select[responder_id='+responder_id+']');		
+				if(updateStatus_Target.attr('prev_statustype_order') > updateStatus_Target.find('option:selected').attr('order')) {
+					$('#modal_rollback_status').modal('open');
+				}
+				else {
+					updateStatusProceed();
+				}
+			}
+			
+			function updateStatusProceed() {
+				var isRollback = (updateStatus_Target.attr('prev_statustype_order') > updateStatus_Target.find('option:selected').attr('order')?true:false) ;
+
+				$.getJSON(URL+"api/mobile_setResponderStatus.php", "callcard_id="+updateStatus_Target.attr('callcard_id')+"&responder_id="+updateStatus_Target.attr('responder_id')+"&responder_statustype_code="+$('select[responder_id='+updateStatus_Target.attr('responder_id')+']').val()+"&isRollback="+isRollback+"&name="+$('#username').text(), function(data) {
+					if(data.status!='ok') {
+						$('#modal_warning').text(data.status).modal('open');
+					}
+					else {
+						fireEvent.set(Date.now());
+					}					
+				});
+			}
+			
+			function updateStatusCancel() {
+				updateStatus_Target.val(updateStatus_Target.attr('prev_statustype_code')).material_select();
+			}
+			//========================================================================================================================= Update Status End
+			//========================================================================================================================= Camera Start
+			var LS_PHOTO, RESPONDER_ID;
+			function openGallery(responder_id, callcard_id) {
+				RESPONDER_ID = responder_id;
+				
+				var h = '';
+				if(localStorage.getItem('1cc_photo_'+RESPONDER_ID)==null) {
+					LS_PHOTO = [];
+				}
+				else {
+					LS_PHOTO = localStorage.getItem('1cc_photo_'+RESPONDER_ID).split(',');
+					for(var i=0; i<LS_PHOTO.length; i++) h += '<img class="photo_view" src="data:image/jpeg;base64,'+LS_PHOTO[i]+'">';
+				}
+				$('.gallery').html(h+'<img class="photo_add" src="img/photo_add.svg" onclick="photoAdd()">');
+				
+				$('#gallery_id').text('Gallery for Callcard '+callcard_id);
+				$('#btnBack, #gallery_id, .carousel, .gallery').toggle();
+			}
+			
+			function closeGallery() {
+				$('#btnBack, #gallery_id, .carousel, .gallery').toggle();
+			}
+			
+			function photoAdd() {
+				navigator.camera.getPicture(cameraCallback, cameraError, cameraOptions);
+			}
+			
+			function cameraCallback(imageData) {
+				$('#photoCaptured').attr('src', imageData);
+
+				toDataURL(imageData, function(dataUrl) {
+					$.ajax({
+						type: "POST",
+						dataType: "json",
+						url: URL+"api/mobile_setPhoto.php",
+						data: {
+							'responder_id': RESPONDER_ID,
+							'filename': imageData.split('/').pop(),
+							'dataUrl': dataUrl.split('base64,')[1],
+							'nric': LS_NRIC
+						},
+						success: function(data){
+							if(data.status!='ok') {
+								$('#modal_warning').text(data.status).modal('open');
+							}
+							else {
+								fireEvent.set(Date.now());
+							}
+						}
+					});
+				});
+			}
+			
+			function cameraError(msg) {
+				$('#modal_warning').text(msg).modal('open');
+			}
+			
+			function toDataURL(url, callback) {
+				var xhr = new XMLHttpRequest();
+				xhr.onload = function() {
+					var reader = new FileReader();
+					reader.onloadend = function() { callback(reader.result); }
+					reader.readAsDataURL(xhr.response);
+				};
+				xhr.open('GET', url);
+				xhr.responseType = 'blob';
+				xhr.send();
+			}
+			
+			function photoCapturedLoaded() {
+				$('#photoRendered').remove();
+				$('.pgCallcard').append('<canvas id="photoRendered" width="300" height="300" style="display:none;"></canvas>');
+				
+				var w = $('#photoCaptured').width();
+				var h = $('#photoCaptured').height();
+				var size = $('#photoRendered').width();
+				var min = 0, cropX = 0, cropY = 0;
+				
+				if(w>h) {
+					cropX = Math.floor((w-h)/2);
+					min = h;
+				}
+				else {
+					cropY = Math.floor((h-w)/2);
+					min = w;
+				}
+
+				var c = document.getElementById("photoRendered");
+				var ctx = c.getContext("2d");
+				var img = document.getElementById("photoCaptured");
+				ctx.drawImage(img, cropX, cropY, min, min, 0, 0, size, size);
+				var thumbnailBase64 = c.toDataURL('image/jpeg', 0.6).split('base64,')[1];
+
+				$('.photo_add').before('<img class="photo_view" src="data:image/jpeg;base64,'+thumbnailBase64+'">');
+				LS_PHOTO.push(thumbnailBase64);
+				localStorage.setItem('1cc_photo_'+RESPONDER_ID, LS_PHOTO.join(','));
+			}
+			//========================================================================================================================= Camera End
+		</script>
+	</body>
+</html>

@@ -1,0 +1,29 @@
+Database Changes:
+	Change venuetype_code 			venue --> Venue
+
+*Bugs:*
+		Manage Resources: Athelete --> Athlete
+		Mobile: Kalo tgh minimize, dpt notification tp bila click, callcard tak refresh
+		Timing server vs web tak sama menyebabkan nak assign responder ada problem
+		Map: Kalo beberapa callcard pada satu tempat, cluster icon kelip2
+		Logo: Ubah logote
+		Change tooltips
+		fixed phone number when import
+
+*Features:*
+		Manage Resource: masukkan 6 kenderan CSE ke dalam resource list
+		Callcard: Status completed xleh rollback
+		Callcard List: Warna icon completed --> hitam
+		Callcard List: tambah filter: all, active, history(classified)
+		Callcard List: Nak list to gambar (to be considered)
+		Edit Callcard: Tambah checking, boleh tekan Filing type kalo semua status dah Completed (rejected. too complicated and deep impact)
+		Manage Resource: Nak icon or indicator utk tau sape active or not
+		Manage Responder: Nak status "Login mobile" or not
+		Map: Since W1CC is Map Centric, the CC should be able to zoomin direct to map or to CC details screen by options (lepas semua settle)
+		Map: Tambah balik standby ambulan kat map
+		Edit Callcard: Notes, bila tekan enter, dia simpan sebaris je
+		Mobile: Notes boleh tambah, xleh delete yg dah ada
+Map: Callcard yg berdekatan, dia save sama coordinate (bukan bugs. kedudukan pin bukan bergantung pada coordinat incident tetapi responder's. So kalo 1 click kat the Mines, satu lagi click dekat2, dah tentu ambik dari resource yg sama unless ada set standby location)
+
+--Rollback Features: Compare 9 & 10 status ada problem
+--Problem with coordinate checking if add coordinate manually not from map click or editted

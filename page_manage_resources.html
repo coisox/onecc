@@ -1,0 +1,70 @@
+<table id="dtResource" class="display">
+	<thead>
+		<tr>
+			<th>Resource Type</th>
+			<th>Name / Team Lead / Vehicle Number</th>
+			<th>Phone</th>
+			<th>Standby Venue</th>
+			<th>Standby Location (GPS)</th>
+			<th>Availability From</th>
+			<th>Availability To</th>
+			<th class="center">Action</th>
+		</tr>
+	</thead>
+	<tbody></tbody>
+</table>
+
+<div class="fixed-action-btn">
+	<a class="btn-floating btn-large pink">
+		<i class="material-icons">person_add</i>
+	</a>
+	<ul>
+		<li><a class="btn-floating lime darken-1" title="Add Manually" onclick="addResource()"><i class="material-icons">edit</i></a></li>
+		<li><a class="btn-floating purple lighten-1" title="Import Deployment Plan From Excel" onclick="addResourceBatch()"><i class="material-icons">file_download</i></a></li>
+	</ul>
+
+</div>
+
+<script>
+	var dtResource;
+	
+	$(document).ready(function(){
+		loadData();
+	});
+
+	function loadData() {
+		dtResource = $('#dtResource').DataTable({
+			ajax: "api/getResource.php",
+			searching: true,
+			bSortClasses: false,
+			lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "All"]],
+			iDisplayLength: 10,
+			columns: [
+				{ "data": "resourcetype_desc" },
+				{ "data": "resource_name" },
+				{ "data": "resource_phone" },
+				{ "data": "venue_desc" },
+				{ "data": "resource_standby_location" },
+				{ "data": "resource_availability_from" },
+				{ "data": "resource_availability_to" },
+				{ "data": null, "className": "center", render:
+					function(data, type, rowData, meta) {
+						var h =
+							'<a href="javascript:;" title="Edit" onclick="editResource('+rowData.dtRow+', \'dtResource\')"><i class="material-icons">edit</i></a>'+
+							'<a href="javascript:;" title="Delete" onclick="deleteResource('+rowData.dtRow+', \'dtResource\')"><i class="material-icons">delete</i></a>';
+						return h;
+					}
+				}
+			],
+			"rowCallback": function(row, rowData, index) {
+				if(rowData.total_active) {
+					$(row).addClass('active');
+				}
+			}
+		}).on('xhr.dt', function(e, settings, data, xhr) {
+			if(data.status!='ok') {
+				Materialize.toast(data.status, 4000);
+			}
+		});
+	}
+</script>

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<title>Autocomplete</title>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.default.min.css" rel="stylesheet">
+		<style>
+			.ac_red {
+				color: red;
+			}
+			.selectize-control.single .selectize-input:after {
+				display: none;
+			}
+			.selectize-control.single .selectize-input {
+				background: white;
+				cursor: text;
+			}
+		</style>
+	</head>
+
+	<body>
+		<select id="select-to" placeholder="Type code"></select>
+		
+		<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js'></script>
+		<script>
+			$('#select-to').selectize({
+				valueField: 'eventcode_code',
+				//labelField: 'name',
+				searchField: ['eventcode_code', 'desc'],
+				options: [
+					{eventcode_code: '111', desc: 'Coisox'},
+					{eventcode_code: '222', desc: 'Coistring'},
+					{eventcode_code: '333', desc: 'Coisox 111'},
+				],
+				render: {
+					item: function(item, escape) {
+						return '<div><span class="ac_red">' + item.eventcode_code + ' - </span>' + item.desc + '</div>';
+					},
+					option: function(item, escape) {
+						return '<div><span class="ac_red">' + item.eventcode_code + ' - </span>' + item.desc + '</div>';
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

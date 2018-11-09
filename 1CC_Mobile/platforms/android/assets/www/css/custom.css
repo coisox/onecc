@@ -1,0 +1,348 @@
+html {
+	line-height: 1.3;
+}
+.pgSignup {
+	display: none;
+}
+.background {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	z-index: -1;
+	width: 100%;
+}
+.background:nth-child(2) {
+	top: 0;
+	bottom: initial;
+	transform: rotate(180deg);
+}
+.sponsor {
+	width: 250px;
+    position: absolute;
+    top: 10px;
+    left: calc(50% - 125px);
+}
+.footer {
+	color: white;
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	bottom: 10px;
+	font-size: 10px;
+}
+.loginContainer {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	width: 220px;
+}
+.loginContainer .row .col {
+	padding: 0;
+}
+.loginContainer input {
+	text-align: center;
+}
+.loginContainer .input-field.col label {
+    width: 100%;
+    text-align: center;
+	left: 0;
+}
+.loginContainer .btn {
+	background-color: #194B88 !important;
+}
+.logo {
+	width: 120px;
+	margin-bottom: 50px;
+}
+.fullwidth {
+	width: 100%;
+}
+input {
+	box-shadow: none !important;
+}
+#modal_simple, #modal_warning, #modal_update_software {
+	text-align: center;
+	padding: 10px;
+}
+#modal_waiting {
+	text-align: center;
+	color: white;
+	background: transparent;
+	box-shadow: none;
+	top: initial !important;
+	bottom: 50px;
+	width: 60%;
+}
+.modal-confirm .col.s12 {
+	padding-top: 20px;
+    text-align: center;
+}
+.modal-confirm .modal-footer {
+	border-top: 1px solid rgba(255,255,255,.3);
+}
+.progress {
+	background-color: #333354;
+}
+.progress .indeterminate {
+    background-color: #E91E63;
+}
+nav {
+    background-color: #333354;
+}
+.navlogo {
+    height: 23px;
+	margin-left: 10px;
+	transform: translateY(2px);
+}
+nav ul a {
+	padding: 0;
+}
+#username {
+	text-transform: capitalize;
+	line-height: initial;
+}
+#userphone {
+	line-height: initial;
+}
+.menu_background {
+	height: 56px;
+    background: url(../img/background.png) no-repeat bottom left;
+    background-size: 600px;
+    padding: 12px 0 0 15px;
+}
+.side-nav li > a {
+    background-color: rgba(0,0,0,0.05);
+	padding: 0 10px;
+}
+.side-nav li > a > i.material-icons {
+	margin: 0 10px 0 0;
+}
+nav .brand-logo i.material-icons {
+	margin-right: 0;
+}
+.carousel {
+	height: calc(100vh - 60px) !important;
+}
+.carousel .carousel-item {
+	width: calc(100% - 40px);
+    height: initial;
+	top: 15px;
+    left: 20px;
+	box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.7);
+	padding: 10px;
+	color: #424242;
+	background: #E0E0E0 url(../img/callcard_background_active.svg) no-repeat top right;
+	background-size: 100% auto;
+}
+.carousel .carousel-item.activeCallcard {
+	color: white;
+	background: #BE393C url(../img/callcard_background_active.svg) no-repeat top right;
+	background-size: 100% auto;
+}
+.carousel .carousel-item .callcard_title {
+	font-size: 16px;
+	font-weight: bold;
+	color: white;
+	background: #9E9E9E;
+	text-align: center;
+	padding: 10px;
+	margin: -10px -10px 0 -10px;
+}
+.carousel .carousel-item.activeCallcard .callcard_title {
+	background: #872728;
+}
+.carousel .carousel-item a {
+    background: #9E9E9E;
+    border-radius: 50%;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.7);
+    width: 42px;
+    height: 42px;
+    text-align: center;
+    line-height: 60px;
+    color: white;
+    display: inline-block;
+}
+.carousel .carousel-item.activeCallcard a {
+	background: #872728;
+}
+.carousel .carousel-item .left a {
+    margin-right: 10px;
+}
+.carousel .carousel-item .right a {
+    margin-left: 10px;
+}
+.carousel .carousel-item .callcard_label {
+	font-size: 12px;
+	font-weight: bold;
+	margin-top: 5px;
+}
+.carousel .carousel-item .callcard_value {
+	color: #616161;
+	font-family: "Roboto Condensed";
+}
+.carousel .carousel-item.activeCallcard .callcard_value {
+	color: #EFCFCF;
+}
+.carousel .carousel-item .row {
+	margin-bottom: 0;
+}
+.carousel .indicators .indicator-item {
+	background-color: #ABACD6;
+}
+.carousel .indicators .indicator-item.active {
+	background-color: #333354;
+}
+.carousel .carousel-item .select-wrapper span.caret {
+	color: #616161;
+}
+.carousel .carousel-item.activeCallcard .select-wrapper span.caret {
+	color: #EFCFCF;
+}
+.carousel .carousel-item .select-wrapper span.caret.disabled {
+	display: none;
+}
+.dropdown-content li>a, .dropdown-content li>span {
+	color: #333354;
+}
+.dropdown-content {
+	max-height: initial !important;
+    position: fixed !important;
+}
+.carousel .carousel-item .select-wrapper input.select-dropdown:disabled {
+	color: #616161;
+}
+#gallery_id {
+	font-size: 14px;
+    position: absolute;
+    left: 85px;
+    top: 1px;
+}
+.photo_view, .photo_add {
+	width: calc(33.3333vw - 6.6666px);
+	height: calc(33.3333vw - 6.6666px);
+	float: left;
+	border: 1px solid #9E9E9E;
+	margin: 5px 0 0 5px;
+	object-fit: cover;
+}
+.nocallcard, .nonetwork {
+	width: 100vw;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+#slide-out li:last-of-type {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+}
+
+/* ================================================================================================== CHATTING*/
+
+#modal_chatting {
+	width: 90%;
+    max-height: 80vh !important;
+    min-height: 80vh !important;
+}
+#modal_chatting .modal-title {
+	margin: 10px;
+}
+.chatBody {
+	height: calc(70vh - 5px);
+	padding: 10px;
+	overflow-y: scroll;
+}
+.chatTime {
+	color: #9E9E9E;
+	clear: both;
+	margin: 20px 0 5px 0;
+	font-size: 10px;
+}
+.chatTime.right b {
+	color: #AB47BC;
+	margin-left: 20px;
+}
+.chatTime.left b {
+	color: #6465A0;
+	margin-right: 20px;
+}
+.chatMessage {
+	color: white;
+    clear: both;
+    padding: 10px;
+    border-radius: 4px;
+    position: relative;
+    background: #AB47BC;
+    max-width: 90%;
+}
+.chatMessage.left {
+	background: #6465A0;
+}
+.chatMessage:after {
+	content: '';
+    width: 10px;
+    height: 10px;
+    transform: rotate(45deg);
+    position: absolute;
+    top: -5px;
+    right: 10px;
+    background: #AB47BC;
+}
+.chatMessage.left:after {
+	right: initial;
+	left: 10px;
+	background: #6465A0;
+}
+.chatFooter {
+	padding: 10px 10px 0 10px;
+	background: #F5F5F5;
+	color: #9E9E9E;
+	position:absolute;
+	bottom: 0;
+	width: 100%;
+	border-top: 1px solid rgba(0,0,0,0.1);
+}
+.chatFooter i {
+	font-size: 30px;
+}
+.chatFooter .btn-flat {
+	transform: translate(5px, -18px);
+    padding: 0 10px;
+	background: transparent;
+}
+.chatFooter .btn-flat .material-icons {
+    font-size: 30px;
+}
+#chatBox {
+	width: calc(100% - 76px);
+    background: white;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 4px;
+    min-height: 1.5rem;
+    height: 1.5rem;
+    padding: 10px;
+    margin: 0;
+}
+#mobileUrl, #mobileVersion {
+	position: absolute;
+    width: 100%;
+    text-align: center;
+    bottom: 76px;
+    color: #9E9E9E;
+    font-size: 8px;
+    line-height: initial;
+}
+#mobileVersion {
+    bottom: 65px !important;
+	right: initial !important;
+}
+
+/*Bila software keyboard dibuka*/
+@media only screen and (max-height : 400px) {
+	.sponsor, .logo, .footer {
+		display: none;
+	}
+}

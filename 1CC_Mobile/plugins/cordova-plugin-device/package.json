@@ -1,0 +1,128 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "https://github.com/apache/cordova-plugin-device.git",
+        "scope": null,
+        "escapedName": null,
+        "name": null,
+        "rawSpec": "https://github.com/apache/cordova-plugin-device.git",
+        "spec": "git+https://github.com/apache/cordova-plugin-device.git",
+        "type": "hosted",
+        "hosted": {
+          "type": "github",
+          "ssh": "git@github.com:apache/cordova-plugin-device.git",
+          "sshUrl": "git+ssh://git@github.com/apache/cordova-plugin-device.git",
+          "httpsUrl": "git+https://github.com/apache/cordova-plugin-device.git",
+          "gitUrl": "git://github.com/apache/cordova-plugin-device.git",
+          "shortcut": "github:apache/cordova-plugin-device",
+          "directUrl": "https://raw.githubusercontent.com/apache/cordova-plugin-device/master/package.json"
+        }
+      },
+      "D:\\Cloud\\Mega\\Projects\\Website\\1CC\\1CC_Mobile\\node_modules"
+    ]
+  ],
+  "_from": "git+https://github.com/apache/cordova-plugin-device.git",
+  "_id": "cordova-plugin-device@1.1.7-dev",
+  "_inCache": true,
+  "_location": "/cordova-plugin-device",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "https://github.com/apache/cordova-plugin-device.git",
+    "scope": null,
+    "escapedName": null,
+    "name": null,
+    "rawSpec": "https://github.com/apache/cordova-plugin-device.git",
+    "spec": "git+https://github.com/apache/cordova-plugin-device.git",
+    "type": "hosted",
+    "hosted": {
+      "type": "github",
+      "ssh": "git@github.com:apache/cordova-plugin-device.git",
+      "sshUrl": "git+ssh://git@github.com/apache/cordova-plugin-device.git",
+      "httpsUrl": "git+https://github.com/apache/cordova-plugin-device.git",
+      "gitUrl": "git://github.com/apache/cordova-plugin-device.git",
+      "shortcut": "github:apache/cordova-plugin-device",
+      "directUrl": "https://raw.githubusercontent.com/apache/cordova-plugin-device/master/package.json"
+    }
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/apache/cordova-plugin-device.git#233a8b3cfb2578b22faaf338635a5a226c3c3715",
+  "_shasum": "b93477f67f3500e493362f8371e25d595f5094d5",
+  "_shrinkwrap": null,
+  "_spec": "https://github.com/apache/cordova-plugin-device.git",
+  "_where": "D:\\Cloud\\Mega\\Projects\\Website\\1CC\\1CC_Mobile\\node_modules",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://issues.apache.org/jira/browse/CB"
+  },
+  "cordova": {
+    "id": "cordova-plugin-device",
+    "platforms": [
+      "firefoxos",
+      "tizen",
+      "android",
+      "amazon-fireos",
+      "ubuntu",
+      "ios",
+      "blackberry10",
+      "wp7",
+      "wp8",
+      "windows8",
+      "windows",
+      "browser",
+      "osx"
+    ]
+  },
+  "dependencies": {},
+  "description": "Cordova Device Plugin",
+  "devDependencies": {
+    "jshint": "^2.6.0"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "2.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "gitHead": "233a8b3cfb2578b22faaf338635a5a226c3c3715",
+  "homepage": "https://github.com/apache/cordova-plugin-device#readme",
+  "keywords": [
+    "cordova",
+    "device",
+    "ecosystem:cordova",
+    "cordova-firefoxos",
+    "cordova-tizen",
+    "cordova-android",
+    "cordova-amazon-fireos",
+    "cordova-ubuntu",
+    "cordova-ios",
+    "cordova-blackberry10",
+    "cordova-wp7",
+    "cordova-wp8",
+    "cordova-windows8",
+    "cordova-windows",
+    "cordova-browser",
+    "cordova-osx"
+  ],
+  "license": "Apache-2.0",
+  "name": "cordova-plugin-device",
+  "optionalDependencies": {},
+  "readme": "---\r\ntitle: Device\r\ndescription: Get device information.\r\n---\r\n<!--\r\n# license: Licensed to the Apache Software Foundation (ASF) under one\r\n#         or more contributor license agreements.  See the NOTICE file\r\n#         distributed with this work for additional information\r\n#         regarding copyright ownership.  The ASF licenses this file\r\n#         to you under the Apache License, Version 2.0 (the\r\n#         \"License\"); you may not use this file except in compliance\r\n#         with the License.  You may obtain a copy of the License at\r\n#\r\n#           http://www.apache.org/licenses/LICENSE-2.0\r\n#\r\n#         Unless required by applicable law or agreed to in writing,\r\n#         software distributed under the License is distributed on an\r\n#         \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\r\n#         KIND, either express or implied.  See the License for the\r\n#         specific language governing permissions and limitations\r\n#         under the License.\r\n-->\r\n\r\n|AppVeyor|Travis CI|\r\n|:-:|:-:|\r\n|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-device?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-device)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-device.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-device)|\r\n\r\n# cordova-plugin-device\r\n\r\nThis plugin defines a global `device` object, which describes the device's hardware and software.\r\nAlthough the object is in the global scope, it is not available until after the `deviceready` event.\r\n\r\n```js\r\ndocument.addEventListener(\"deviceready\", onDeviceReady, false);\r\nfunction onDeviceReady() {\r\n    console.log(device.cordova);\r\n}\r\n```\r\n\r\nReport issues with this plugin on the [Apache Cordova issue tracker](https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20%28Open%2C%20%22In%20Progress%22%2C%20Reopened%29%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20Device%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC)\r\n\r\n\r\n## Installation\r\n\r\n    cordova plugin add cordova-plugin-device\r\n\r\n## Properties\r\n\r\n- device.cordova\r\n- device.model\r\n- device.platform\r\n- device.uuid\r\n- device.version\r\n- device.manufacturer\r\n- device.isVirtual\r\n- device.serial\r\n\r\n## device.cordova\r\n\r\nGet the version of Cordova running on the device.\r\n\r\n### Supported Platforms\r\n\r\n- Amazon Fire OS\r\n- Android\r\n- BlackBerry 10\r\n- Browser\r\n- Firefox OS\r\n- iOS\r\n- Tizen\r\n- Windows Phone 7 and 8\r\n- Windows\r\n- OSX\r\n\r\n## device.model\r\n\r\nThe `device.model` returns the name of the device's model or\r\nproduct. The value is set by the device manufacturer and may be\r\ndifferent across versions of the same product.\r\n\r\n### Supported Platforms\r\n\r\n- Android\r\n- BlackBerry 10\r\n- Browser\r\n- iOS\r\n- Tizen\r\n- Windows Phone 7 and 8\r\n- Windows\r\n- OSX\r\n\r\n### Quick Example\r\n\r\n```js\r\n// Android:    Nexus One       returns \"Passion\" (Nexus One code name)\r\n//             Motorola Droid  returns \"voles\"\r\n// BlackBerry: Torch 9800      returns \"9800\"\r\n// Browser:    Google Chrome   returns \"Chrome\"\r\n//             Safari          returns \"Safari\"\r\n// iOS:     for the iPad Mini, returns iPad2,5; iPhone 5 is iPhone 5,1. See http://theiphonewiki.com/wiki/index.php?title=Models\r\n// OSX:                        returns \"x86_64\"\r\n//\r\nvar model = device.model;\r\n```\r\n\r\n### Android Quirks\r\n\r\n- Gets the [product name](http://developer.android.com/reference/android/os/Build.html#PRODUCT) instead of the [model name](http://developer.android.com/reference/android/os/Build.html#MODEL), which is often the production code name. For example, the Nexus One returns `Passion`, and Motorola Droid returns `voles`.\r\n\r\n### Tizen Quirks\r\n\r\n- Returns the device model assigned by the vendor, for example, `TIZEN`\r\n\r\n### Windows Phone 7 and 8 Quirks\r\n\r\n- Returns the device model specified by the manufacturer. For example, the Samsung Focus returns `SGH-i917`.\r\n\r\n## device.platform\r\n\r\nGet the device's operating system name.\r\n\r\n```js\r\nvar string = device.platform;\r\n```\r\n### Supported Platforms\r\n\r\n- Android\r\n- BlackBerry 10\r\n- Browser\r\n- Firefox OS\r\n- iOS\r\n- Tizen\r\n- Windows Phone 7 and 8\r\n- Windows\r\n- OSX\r\n\r\n### Quick Example\r\n\r\n```js\r\n// Depending on the device, a few examples are:\r\n//   - \"Android\"\r\n//   - \"BlackBerry 10\"\r\n//   - \"browser\"\r\n//   - \"iOS\"\r\n//   - \"WinCE\"\r\n//   - \"Tizen\"\r\n//   - \"Mac OS X\"\r\nvar devicePlatform = device.platform;\r\n```\r\n\r\n### Windows Phone 7 Quirks\r\n\r\nWindows Phone 7 devices report the platform as `WinCE`.\r\n\r\n### Windows Phone 8 Quirks\r\n\r\nWindows Phone 8 devices report the platform as `Win32NT`.\r\n\r\n## device.uuid\r\n\r\nGet the device's Universally Unique Identifier ([UUID](http://en.wikipedia.org/wiki/Universally_Unique_Identifier)).\r\n\r\n```js\r\nvar string = device.uuid;\r\n```\r\n\r\n### Description\r\n\r\nThe details of how a UUID is generated are determined by the device manufacturer and are specific to the device's platform or model.\r\n\r\n### Supported Platforms\r\n\r\n- Android\r\n- BlackBerry 10\r\n- iOS\r\n- Tizen\r\n- Windows Phone 7 and 8\r\n- Windows\r\n- OSX\r\n\r\n### Quick Example\r\n\r\n```js\r\n// Android: Returns a random 64-bit integer (as a string, again!)\r\n//          The integer is generated on the device's first boot\r\n//\r\n// BlackBerry: Returns the PIN number of the device\r\n//             This is a nine-digit unique integer (as a string, though!)\r\n//\r\n// iPhone: (Paraphrased from the UIDevice Class documentation)\r\n//         Returns the [UIDevice identifierForVendor] UUID which is unique and the same for all apps installed by the same vendor. However the UUID can be different if the user deletes all apps from the vendor and then reinstalls it.\r\n// Windows Phone 7 : Returns a hash of device+current user,\r\n// if the user is not defined, a guid is generated and will persist until the app is uninstalled\r\n// Tizen: returns the device IMEI (International Mobile Equipment Identity or IMEI is a number\r\n// unique to every GSM and UMTS mobile phone.\r\nvar deviceID = device.uuid;\r\n```\r\n\r\n### iOS Quirk\r\n\r\nThe `uuid` on iOS uses the identifierForVendor property. It is unique to the device across the same vendor, but will be different for different vendors and will change if all apps from the vendor are deleted and then reinstalled.\r\nRefer [here](https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIDevice_Class/#//apple_ref/occ/instp/UIDevice/identifierForVendor) for details.\r\nThe UUID will be the same if app is restored from a backup or iCloud as it is saved in preferences. Users using older versions of this plugin will still receive the same previous UUID generated by another means as it will be retrieved from preferences.\r\n\r\n### OSX Quirk\r\n\r\nThe `uuid` on OSX is generated automatically if it does not exist yet and is stored in the `standardUserDefaults` in the `CDVUUID` property.\r\n\r\n### Windows Phone 7 and 8 Quirks\r\n\r\nThe `uuid` for Windows Phone 7 requires the permission\r\n`ID_CAP_IDENTITY_DEVICE`.  Microsoft will likely deprecate this\r\nproperty soon.  If the capability is not available, the application\r\ngenerates a persistent guid that is maintained for the duration of the\r\napplication's installation on the device.\r\n\r\n## device.version\r\n\r\nGet the operating system version.\r\n\r\n    var string = device.version;\r\n\r\n### Supported Platforms\r\n\r\n- Android 2.1+\r\n- BlackBerry 10\r\n- Browser\r\n- iOS\r\n- Tizen\r\n- Windows Phone 7 and 8\r\n- Windows\r\n- OSX\r\n\r\n### Quick Example\r\n\r\n```js\r\n// Android:    Froyo OS would return \"2.2\"\r\n//             Eclair OS would return \"2.1\", \"2.0.1\", or \"2.0\"\r\n//             Version can also return update level \"2.1-update1\"\r\n//\r\n// BlackBerry: Torch 9800 using OS 6.0 would return \"6.0.0.600\"\r\n//\r\n// Browser:    Returns version number for the browser\r\n//\r\n// iPhone:     iOS 3.2 returns \"3.2\"\r\n//\r\n// Windows Phone 7: returns current OS version number, ex. on Mango returns 7.10.7720\r\n// Windows 8: return the current OS version, ex on Windows 8.1 returns 6.3.9600.16384\r\n// Tizen: returns \"TIZEN_20120425_2\"\r\n// OSX:        El Capitan would return \"10.11.2\"\r\n//\r\nvar deviceVersion = device.version;\r\n```\r\n\r\n## device.manufacturer\r\n\r\nGet the device's manufacturer.\r\n\r\n    var string = device.manufacturer;\r\n\r\n### Supported Platforms\r\n\r\n- Android\r\n- BlackBerry 10\r\n- iOS\r\n- Windows Phone 7 and 8\r\n- Windows\r\n\r\n### Quick Example\r\n\r\n```js\r\n// Android:    Motorola XT1032 would return \"motorola\"\r\n// BlackBerry: returns \"BlackBerry\"\r\n// iPhone:     returns \"Apple\"\r\n//\r\nvar deviceManufacturer = device.manufacturer;\r\n```\r\n\r\n## device.isVirtual\r\n\r\nwhether the device is running on a simulator.\r\n\r\n```js\r\nvar isSim = device.isVirtual;\r\n```\r\n\r\n### Supported Platforms\r\n\r\n- Android 2.1+\r\n- iOS\r\n- Windows Phone 8\r\n- Windows\r\n- OSX\r\n\r\n### OSX Quirk\r\n\r\nThe `isVirtual` property on OS X always returns false.\r\n\r\n## device.serial\r\n\r\nGet the device hardware serial number ([SERIAL](http://developer.android.com/reference/android/os/Build.html#SERIAL)).\r\n\r\n```js\r\nvar string = device.serial;\r\n```\r\n\r\n### Supported Platforms\r\n\r\n- Android\r\n- OSX\r\n\r\n",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-device.git"
+  },
+  "scripts": {
+    "jshint": "node node_modules/jshint/bin/jshint www && node node_modules/jshint/bin/jshint src && node node_modules/jshint/bin/jshint tests",
+    "test": "npm run jshint"
+  },
+  "types": "./types/index.d.ts",
+  "version": "1.1.7-dev"
+}

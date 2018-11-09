@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<title>1CC Mobile</title>
+	</head>
+
+	<body>
+		<div id="sim"></div>
+		<script src='lib/jquery.min.js'></script>
+		<script type="text/javascript" src="cordova.js"></script>
+		<script>
+			document.addEventListener("deviceready", onDeviceReady, false);
+			
+			/*
+			FCMPlugin.subscribeToTopic('Notification');
+			
+			FCMPlugin.onTokenRefresh(function(token){
+				alert( token );
+			});
+			
+			FCMPlugin.onNotification(function(data){
+				if(data.wasTapped){
+				  //Notification was received on device tray and tapped by the user.
+				  alert( "From background: "+JSON.stringify(data) );
+				}else{
+				  //Notification was received in foreground. Maybe the user needs to be notified.
+				  alert( "From foreground"+JSON.stringify(data) );
+				}
+			});
+*/
+			function onDeviceReady() {
+				/*
+				var backgroundGeolocationCallback = function(location) {
+					$.get("http://54.255.152.73/api/mobile_setResponderLocation.php?phone=+6019-210 5856&coordinate="+location.latitude+","+location.longitude, function(data){ console.log(data); });
+					backgroundGeolocation.finish();
+				};
+
+				backgroundGeolocation.configure(backgroundGeolocationCallback, null, {
+					desiredAccuracy: 0,
+					stationaryRadius: 10,
+					distanceFilter: 25,
+					interval: 10000,
+					stopOnTerminate: false,
+					startOnBoot: true,
+					notificationTitle: '1CC Location Tracking',
+					notificationText: 'Enabled',
+					maxLocations: 999999999
+				});
+
+				backgroundGeolocation.start();
+				*/
+			}
+		</script>
+	</body>
+</html>

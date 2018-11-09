@@ -1,0 +1,274 @@
+<input id="mapsearch" type="text" placeholder="Search" accesscontrol="admin gdu">
+<div id="map"></div>
+
+<div class="float-panel">
+
+	<ul class="collapsible" data-collapsible="expandable">
+		<li>
+			<div class="collapsible-header active"><i class="material-icons">fullscreen_exit</i><i class="material-icons">fullscreen</i>Filter Visibility</div>
+			<div class="collapsible-body">
+				<div class="row">
+					<input type="checkbox" class="filled-in" id="pinTypeVenue" checked="checked">
+					<label for="pinTypeVenue">Venues</label>
+				</div>
+				<div class="row">
+					<input type="checkbox" class="filled-in" id="pinTypeHotel" checked="checked">
+					<label for="pinTypeHotel">Hotels</label>
+				</div>
+				<div class="row">
+					<input type="checkbox" class="filled-in" id="pinTypeAmbulance" checked="checked">
+					<label for="pinTypeAmbulance">Ambulance</label>
+				</div>
+				<div class="row">
+					<input type="checkbox" class="filled-in" id="pinTypeResponder" checked="checked">
+					<label for="pinTypeResponder">Responders</label>
+				</div>
+				<div class="row">
+					<input type="checkbox" class="filled-in" id="pinInfoName" checked="checked">
+					<label for="pinInfoName">Responders Name</label>
+				</div>
+			</div>
+		</li>
+		<li>
+			<div class="collapsible-header active"><i class="material-icons">fullscreen_exit</i><i class="material-icons">fullscreen</i>Active Callcard</div>
+			<div class="collapsible-body" id="activeCallcard"></div>
+		</li>
+	</ul>
+	
+</div>
+
+<div class="fixed-action-btn gps_fixed" title="Reset Map">
+	<a class="btn-floating btn-large uiblue" href="javascript:;" onclick="resetMap()">
+		<i class="material-icons">gps_fixed</i>
+	</a>
+</div>
+
+<div class="fixed-action-btn" accesscontrol="admin gdu" title="Add Callcard">
+	<a class="btn-floating btn-large pink" href="javascript:;" onclick="addCallcard()">
+		<i class="material-icons">add_alert</i>
+	</a>
+</div>
+
+<script>
+	window.google = {};
+	
+	$(document).ready(function(){
+		$('.collapsible').collapsible();
+		getActiveCallcard();
+	});
+	
+	var filterByCallcard = null;
+	var needFitBound = false;
+	function getActiveResponders(callcard_id) {
+		if(callcard_id=='reset') filterByCallcard = null;
+		else if(callcard_id!='retain') {
+			filterByCallcard = callcard_id;
+			needFitBound = true;
+		}
+	
+		$.getJSON("api/getActiveResponders.php"+(filterByCallcard?'?filterByCallcard='+filterByCallcard:''), function(data) {
+			if(data.status!='ok') {
+				Materialize.toast(data.status, 4000);
+			}
+			else {
+				markers.pinTypeResponder.forEach(function(marker) { marker.setMap(null); });
+				markers.pinTypeResponder = [];
+				$('.pinTypeResponder').remove();
+				if(markerCluster) markerCluster.clearMarkers();
+				
+				var focusBounds = new google.maps.LatLngBounds();
+				
+				$.each(data.data, function(i, responder) {
+					addMarker({
+						'lat': Number(responder.current_location.split(',')[0]),
+						'lng': Number(responder.current_location.split(',')[1]),
+						'type': 'pinTypeResponder',
+						'name': responder.resource_name,
+						'callcard': responder.responder_callcard_id,
+						'icon': 'img/resourcetype_'+responder.resource_resourcetype_code+'.svg'
+					});
+					focusBounds.extend(new google.maps.LatLng(Number(responder.current_location.split(',')[0]), Number(responder.current_location.split(',')[1])));
+				});
+				
+				markerCluster = new MarkerClusterer(map, markers.pinTypeResponder, {imagePath: 'img/m'});
+
+				//zoom to responders of desired callcard. Must one time otherwise after scroll map, revert to fit
+				if(needFitBound) {
+					map.fitBounds(focusBounds);
+					needFitBound = false;
+				}
+			}
+		});
+	}
+	
+	function getActiveCallcard() {
+		$.getJSON("api/getCallcard.php?activecallcard=true", function(data) {
+			if(data.status!='ok') {
+				Materialize.toast(data.status, 4000);
+			}
+			else {
+				var html_activeCallcard = [];
+				$.each(data.data, function(i, activeCallcard) {
+					var html_responderIcon = [], html_responderStatus = [], html_responderLog = [];
+					
+					$.each(activeCallcard.arr_responders, function(i, responder) {
+						html_responderIcon.push('<span class="activeCallcard_StatusIcon '+responder.statustype_color+'"></span>');
+						html_responderStatus.push(
+							'<div class="activeCallcard_Label">Responder '+(i+1)+'</div>'+
+							'<div class="activeCallcard_Colon">:</div>'+
+							'<div class="activeCallcard_Value">'+responder.resource_name+' ('+responder.resource_phone+') - '+responder.statustype_desc+'</div>'
+						);
+					});
+					
+					$.each(activeCallcard.arr_statuslog, function(i, statuslog) {
+						html_responderLog.push(
+							'<div class="activeCallcard_Label">'+statuslog.statuslog_time+'</div>'+
+							'<div class="activeCallcard_Colon">:</div>'+
+							'<div class="activeCallcard_Value">'+statuslog.statuslog_desc+'</div>'
+						);
+					});
+					
+					html_activeCallcard.push(
+						'<div class="activeCallcard_Item">'+
+							'<div>'+
+								'&nbsp;'+
+								'<div class="left activeCallcard_ID">'+activeCallcard.callcard_id+'</div>'+
+								'<div class="right" style="transform: translateY(-4px)">'+
+									'<a href="javascript:;" title="Zoom All Responders" onclick="getActiveResponders(\''+activeCallcard.callcard_id+'\')"><i class="material-icons">center_focus_strong</i></a>'+
+									'<a href="#callcard_list='+activeCallcard.callcard_id+'" title="Go To List" accesscontrol="admin gdu" onclick="activeMenu(\'#callcard_list\')"><i class="material-icons">format_list_bulleted</i></a>'+
+									'<a href="javascript:;" title="Gallery" id="activeCallcard_PhotoAlert_'+activeCallcard.callcard_id+'" onclick="showPhoto(\''+activeCallcard.callcard_id+'\')"><i class="material-icons">insert_photo</i></a>'+
+									'<a href="javascript:;" title="Chatroom" id="activeCallcard_ChatAlert_'+activeCallcard.callcard_id+'" onclick="openChat(\''+activeCallcard.callcard_id+'\', \''+activeCallcard.callcard_status+'\')"><i class="material-icons">chat</i></a>'+
+								'</div>'+
+							'</div>'+
+							'<div class="activeCallcard_Infowindow">'+
+								'<div>'+
+									'<div class="activeCallcard_Label">Incident Location</div>'+
+									'<div class="activeCallcard_Colon">:</div>'+
+									'<div class="activeCallcard_Value">'+activeCallcard.callcard_incident_address+'</div>'+
+								'</div>'+
+								'<div>'+
+									'<div class="activeCallcard_Label">Patient Name</div>'+
+									'<div class="activeCallcard_Colon">:</div>'+
+									'<div class="activeCallcard_Value">'+activeCallcard.callcard_patient_name+'</div>'+
+								'</div>'+
+								'<div>'+html_responderStatus.join('')+'</div>'+
+								'<hr>'+
+								'<div>'+html_responderLog.join('')+'</div>'+
+							'</div>'+
+						'</div>'
+					);
+				});				
+				$('#activeCallcard').html(html_activeCallcard.join(''));
+				
+				$(localStorage.getItem('1cc_chatactive')).addClass('active');	//restore previous chat state
+				$(localStorage.getItem('1cc_photoactive')).addClass('active');	//restore previous chat state
+			}
+			
+			$('[accesscontrol*='+profile.user_roles+']').show(); //Access Control
+		});
+	}
+	
+	function plotVenueOnMap() {
+		if(jVenue.length!=0) {
+			$.each(jVenue, function(i, venue) {
+				addMarker({
+					'lat': Number(venue.venue_coordinate.split(',')[0]),
+					'lng': Number(venue.venue_coordinate.split(',')[1]),
+					'type': 'pinType'+venue.venuetype_code,
+					'address':  venue.venue_address,
+					'icon': 'img/'+venue.venue_icon
+				});
+			});
+		}
+		else {
+			setTimeout(plotVenueOnMap, 100);
+		}
+	}
+	
+	function plotAmbulanceOnMap() {
+		$.getJSON("api/getAmbulance.php", function(data) {
+			if(data.status!='ok') {
+				Materialize.toast(data.status, 4000);
+			}
+			else {
+				markers.pinTypeAmbulance.forEach(function(marker) { marker.setMap(null); });
+				markers.pinTypeAmbulance = [];
+				$('.pinTypeAmbulance').remove();
+				
+				$.each(data.data, function(i, ambulance) {
+					addMarker({
+						'lat': Number(ambulance.resource_standby_location.split(',')[0]),
+						'lng': Number(ambulance.resource_standby_location.split(',')[1]),
+						'type': 'pinTypeAmbulance',
+						'icon': 'img/pinTypeAmbulance.svg'
+					});
+				});
+			}
+		});
+	}
+	
+	function escapeHtml(text) {
+		'use strict';
+		return text.replace(/[\"&<>]/g, function (a) {
+			return { '"': '&quot;', '&': '&amp;', '<': '&lt;', '>': '&gt;' }[a];
+		});
+	}
+	
+	//cara bodoh utk control clustered marker
+	setInterval(hideClusteredMarker, 50);
+	function hideClusteredMarker() {
+		if(markerCluster) {
+			var clusters = markerCluster.clusters_;
+
+			for(var i=0, cl=clusters.length; i<cl; i++){
+				for(var j=0, ml=clusters[i].markers_.length; j<ml; j++){
+					if(clusters[i].markers_.length>1) {
+						clusters[i].markers_[j].customOverlay.addClass('markerBeingClustered'); //hide
+					}
+					else {
+						clusters[i].markers_[j].customOverlay.removeClass('markerBeingClustered'); //show
+					}
+				}
+			}
+		}
+	}
+
+	$('.filled-in').click(function(){
+		$('#map').attr('filter', $('.filled-in').not(':checked').map(function(){ return this.id }).get());
+	});
+	
+	//========================================================================================================================= Chatting Start
+	fireChat.on('value', function(data) {
+		data.forEach(function(childData) {
+			var CCID = childData.getKey().replace('Callcard_', '');
+			fireChat.child('Callcard_'+CCID).orderByChild('time').limitToLast(1).once('value', function(data) {
+				$.each(data.val(), function(i, o) {
+					if(localStorage.getItem('1cc_chattime'+CCID)!=o.time && ($('#chatId').text()!=CCID || $('#chatId:visible').size()==0)) {
+						$('#activeCallcard_ChatAlert_'+CCID).addClass('active');
+						localStorage.setItem('1cc_chattime'+CCID, o.time);
+						localStorage.setItem('1cc_chatactive', $('[id^=activeCallcard_ChatAlert_].active').map(function(){ return '#'+this.id }).get().join(','));	//save current chat state
+					}
+				});
+			});
+		});
+	});
+	//========================================================================================================================= Chatting End
+	//========================================================================================================================= Photo Notification Start
+	var firePhoto = firebase.database().ref('firePhoto');
+	firePhoto.on('value', function(data) {
+		data.forEach(function(childData) {
+			var CCID = childData.getKey().replace('Callcard_', '');
+			firePhoto.child('Callcard_'+CCID).orderByChild('time').limitToLast(1).once('value', function(data) {
+				$.each(data.val(), function(i, o) {
+					if(localStorage.getItem('1cc_phototime'+CCID)!=o.time && ($('#galleryId').text()!=CCID || $('#galleryId:visible').size()==0)) {
+						$('#activeCallcard_PhotoAlert_'+CCID).addClass('active');
+						localStorage.setItem('1cc_phototime'+CCID, o.time);
+						localStorage.setItem('1cc_photoactive', $('[id^=activeCallcard_PhotoAlert_].active').map(function(){ return '#'+this.id }).get().join(','));	//save current chat state
+					}
+				});
+			});
+		});
+	});
+	//========================================================================================================================= Photo Notification End
+</script>
+<script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBC9tB8qEJYuATxKfjjlW5euBAaTxJjhVU&libraries=geometry,places&callback=initMap'></script>

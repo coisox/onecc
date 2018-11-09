@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "208616034779",
+    "firebase_url": "https://sea-games.firebaseio.com",
+    "project_id": "sea-games",
+    "storage_bucket": "sea-games.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208616034779:android:764c0dd575e32a71",
+        "android_client_info": {
+          "package_name": "my.com.ansi.onecc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208616034779-76senvrm92vtb1altn8vodmvio38cuoi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBn60Mi4NmU-4o3FqMeCUuHKLwyqV-TwJw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

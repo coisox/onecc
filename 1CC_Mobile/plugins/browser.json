@@ -1,0 +1,37 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "my.com.ansi.onecc"
+        },
+        "cordova-plugin-fcm": {
+            "PACKAGE_NAME": "my.com.ansi.onecc"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "my.com.ansi.onecc"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "my.com.ansi.onecc"
+        },
+        "phonegap-plugin-mobile-accessibility": {
+            "PACKAGE_NAME": "my.com.ansi.onecc"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "my.com.ansi.onecc"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "my.com.ansi.onecc"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "my.com.ansi.onecc"
+        }
+    }
+}

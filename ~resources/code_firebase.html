@@ -1,0 +1,69 @@
+var fireCallcard = firebase.database().ref('fireCallcard');
+				var fireResource = firebase.database().ref('fireResource');
+				var fireResponder = firebase.database().ref('fireResponder');
+				var fireResponderStatus = firebase.database().ref('fireResponderStatus');
+				
+				var eventGap = 500;
+				var latestReload_getStat = 0;
+				var latestReload_dtCallcard = 0;
+				var latestReload_dtResource = 0;
+				var latestReload_dtResponder = 0;
+
+				fireCallcard.on('value', function(data) {
+					if(Date.now() - latestReload_getStat > eventGap) {
+						latestReload_getStat = Date.now();
+						getStat();
+					}
+					//getActiveCallcard();
+					if(Date.now() - latestReload_dtCallcard > eventGap) {
+						latestReload_dtCallcard = Date.now();
+						if ($('#dtCallcard').size()) dtCallcard.ajax.reload(null, false);
+					}
+				});
+				
+				fireResource.on('value', function(data) {
+					if(Date.now() - latestReload_dtResource > eventGap) {
+						latestReload_dtResource = Date.now();
+						if ($('#dtResource').size()) {
+							dtResource.ajax.reload(null, false);
+						}
+					}
+				});
+				
+				fireResponder.on('value', function(data) {
+					if(Date.now() - latestReload_getStat > eventGap) {
+						latestReload_getStat = Date.now();
+						getStat();
+					}
+					if(Date.now() - latestReload_dtResponder > eventGap) {
+						latestReload_dtResponder = Date.now();
+						if ($('#dtResponder').size()) {
+							dtResponder.ajax.reload(null, false);
+							dtResource.ajax.reload(null, false);
+						}
+					}
+				});
+				
+				fireResponderStatus.on('value', function(data) {
+					if(Date.now() - latestReload_getStat > eventGap) {
+						latestReload_getStat = Date.now();
+						getStat();
+					}
+					if(Date.now() - latestReload_dtCallcard > eventGap) {
+						latestReload_dtCallcard = Date.now();
+						if ($('#dtCallcard').size()) dtCallcard.ajax.reload(null, false);
+					}
+					if(Date.now() - latestReload_dtResponder > eventGap) {
+						latestReload_dtResponder = Date.now();
+						if ($('#dtResponder').size()) {
+							dtResponder.ajax.reload(null, false);
+						}
+					}	
+				});
+				
+				$(document).ajaxSuccess(function(event, xhr, settings) {
+					if (settings.url.indexOf("setCallcard.php")>-1) fireCallcard.set(Date.now());
+					else if (settings.url.indexOf("setResponder.php")>-1) fireResponder.set({val: Date.now()});
+					else if (settings.url.indexOf("setResponderStatus.php")>-1) fireResponderStatus.set({val: Date.now()});
+					else if (settings.url.indexOf("setResource.php")>-1) fireResource.set({val: Date.now()});
+				}

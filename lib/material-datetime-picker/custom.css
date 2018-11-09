@@ -1,0 +1,53 @@
+.c-datepicker, .c-scrim {
+	z-index: 2000;
+}
+.c-datepicker {
+	width: 340px;
+}
+table.c-datepicker__days {
+	width: calc(100% - 40px);
+}
+table.c-datepicker__days td, table.c-datepicker__days th {
+	text-align: center;
+}
+.c-datepicker__header-date {
+	height: 180px;
+	background: #57588F;
+}
+.c-datepicker__header-date span, .c-datepicker__date {
+	line-height: 1.35;
+}
+.c-datepicker__header-day {
+	background: #333354;
+}
+.c-datepicker__day--selected {
+	color: white;
+}
+.c-datepicker__day--selected:before {
+	background: #57588F;
+	width: 35px;
+    height: 35px;
+	z-index: -1;
+}
+.c-datepicker__day--selected:after {
+	display: none;
+}
+.u-hover-ball-effect:hover:before, .c-datepicker__day-body:hover:before, .c-datepicker__clock__num:hover:before, .c-datepicker__clock__am-pm-toggle label:hover:before,
+.c-datepicker__day-body--active:not(.hide-hand):before, .c-datepicker__clock__num--active:not(.hide-hand):before,
+.c-datepicker__hour-hand,
+.c-datepicker__clock-hands
+{
+	background: #57588F !important;
+}
+.c-datepicker__clock {
+	margin: 90px auto;
+}
+.c-datepicker__clock::before {
+	top: -20px;
+}
+.c-datepicker__clock__am-pm-toggle {
+	top: -90px;
+}
+.c-datepicker .modal-btns a {
+	color: #57588F !important;
+}

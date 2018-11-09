@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<title>1CC</title>
+		<link rel="icon" href="img/favicon.png?v1.5.2">
+		<link rel="stylesheet" href="lib/materialize-v0.98.2/css/materialize.min.css">
+		<link rel="stylesheet" href="css/custom.css">
+	</head>
+	<body class="pgLogin">
+		<img class="sponsor1" src="img/sponsor1.svg">
+		<img class="sponsor2" src="img/sponsor2.svg">
+		<table>
+			<tr>
+				<td id="td1" colspan="2" rowspan="2">
+					<form class="formcontainer">
+						<img class="logo" src="img/logo_1cc.svg">
+						<div class="input-field col s12">
+							<input id="username" name="username" type="text">
+							<label for="username">username</label>
+						</div>
+						<div class="input-field col s12">
+							<input id="password" name="password" type="text">
+							<label for="password">password</label>
+						</div>
+						<button class="btn waves-effect waves-light pink fullwidth" type="submit" name="action">LOGIN</button>
+					</form>
+				</td>
+				<td id="td2"></td>
+				<td id="td3" rowspan="2"></td>
+			</tr>
+			<tr>
+				<td id="td4">
+					<video autoplay loop><source src="vid/video.4pm" type="video/mp4" /></video>
+				</td>
+			</tr>
+			<tr>
+				<td id="td5" colspan="2"></td>
+				<td id="td6" colspan="2" rowspan="2"><img src="img/logo_sea.png"></td>
+			</tr>
+			<tr>
+				<td id="td7"></td>
+				<td id="td8"></td>
+			</tr>
+		</table>
+		<a href="./changelog" class="version">v1.5.11</a>
+		
+		<script src='lib/jquery.min.js'></script>
+		<script src="lib/materialize-v0.98.2/js/materialize.min.js"></script>
+		<script>
+			//logout
+			localStorage.removeItem('1cc_profile');
+			
+			$('.formcontainer').submit(function(e){
+				e.preventDefault();
+				$.getJSON("api/login.php", $('.formcontainer :input').serialize(), function(data) {
+					if(data.status!='ok') {
+						Materialize.toast('<div style="width:100%; text-align:center;">'+data.status+'</div>', 2000);
+					}
+					else {
+						localStorage.setItem('1cc_profile', JSON.stringify(data));
+						window.location = 'main.html';
+					}
+					$('#toast-container').css({
+						top: $('#td1').offset().top + $('#td1').height() - 69 + 'px',
+						left: '50px',
+						width: $('#td1').width() - 20 + 'px'
+					});
+				});
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="64px" height="83.2px" viewBox="-7 -16.6 64 83.2" enable-background="new -7 -16.6 64 83.2" xml:space="preserve">
+<radialGradient id="SVGID_1_" cx="291.8008" cy="-2908.8203" r="26.3501" gradientTransform="matrix(1 0 0 -0.3542 -266.8003 -973.0383)" gradientUnits="userSpaceOnUse">
+	<stop  offset="0" style="stop-color:#000000;stop-opacity:0.3"/>
+	<stop  offset="1" style="stop-color:#000000;stop-opacity:0"/>
+</radialGradient>
+<ellipse fill="url(#SVGID_1_)" cx="25" cy="57.266" rx="26.348" ry="9.334"/>
+<path fill="#19B4CA" d="M25-16.6c-17.673,0-32,14.327-32,32s8.2,22.668,32,41.866C48.8,38.065,57,33.073,57,15.4
+	S42.674-16.6,25-16.6z"/>
+<circle fill="#FFFFFF" cx="25" cy="15.399" r="28"/>
+<rect x="10.216" y="4.124" fill="#E2A317" width="29.56" height="14.215"/>
+<path fill="#E2A317" d="M10.216,19.988V33.4h29.56V19.988H10.216z M28.433,33.39h-6.464v-9.005h6.464V33.39z"/>
+<rect x="12.706" y="5.771" fill="#FFFFFF" width="4.067" height="4.069"/>
+<rect x="19.547" y="5.771" fill="#FFFFFF" width="4.068" height="4.069"/>
+<rect x="26.377" y="5.771" fill="#FFFFFF" width="4.067" height="4.069"/>
+<rect x="33.206" y="5.771" fill="#FFFFFF" width="4.067" height="4.069"/>
+<rect x="12.706" y="12.098" fill="#FFFFFF" width="4.067" height="4.066"/>
+<rect x="19.547" y="12.098" fill="#FFFFFF" width="4.068" height="4.066"/>
+<rect x="26.377" y="12.098" fill="#FFFFFF" width="4.067" height="4.066"/>
+<rect x="33.206" y="12.098" fill="#FFFFFF" width="4.067" height="4.066"/>
+<path fill="#FFFFFF" d="M35.959,29.287h-4.711v-3.384c0-1.296,1.059-2.361,2.363-2.361l0,0c1.3,0,2.363,1.053,2.363,2.361v3.384
+	H35.959z"/>
+<path fill="#FFFFFF" d="M18.738,29.287h-4.711V24.14c0-0.329,0.27-0.597,0.596-0.597h3.521c0.325,0,0.594,0.268,0.594,0.597V29.287
+	L18.738,29.287z"/>
+<polygon fill="#7A2200" points="36.372,0.813 36.372,4.124 13.63,4.124 13.63,0.813 8.919,0.813 8.919,4.133 41.07,4.133 
+	41.07,0.813 "/>
+<rect x="8.919" y="18.071" fill="#7A2200" width="32.151" height="1.917"/>
+<polygon fill="#7A2200" points="36.372,4.124 36.372,0.813 36.372,-2.601 13.63,-2.601 13.63,0.813 13.63,4.124 "/>
+<polygon fill="#46484C" points="28.433,30.941 28.433,33.39 21.969,33.39 21.969,30.941 6.696,30.941 6.696,33.399 43.305,33.399 
+	43.305,30.941 "/>
+</svg>

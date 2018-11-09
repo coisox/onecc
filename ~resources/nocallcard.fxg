@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Graphic version="2.0" viewHeight="400" viewWidth="550" ATE:version="1.0.0" flm:version="1.0.0" d:id="1" d:using="" xmlns="http://ns.adobe.com/fxg/2008" xmlns:ATE="http://ns.adobe.com/ate/2009" xmlns:d="http://ns.adobe.com/fxg/2008/dt" xmlns:flm="http://ns.adobe.com/flame/2008">
+  <Library/>
+  <Group blendMode="normal" d:type="layer" d:userLabel="Layer 4">
+    <Group flm:isDrawingObject="false">
+      <Path data="M279.05 204Q279.16289 204.01484 279.275 204.025 288.45234 205.30234 295.3 212.15 303.75 220.6 303.75 232.5L303.75 245.75Q303.8 251.55 308.2 253.05 310.6 253.7 310.9 256.1 311.45 264.35 301.7 264.35L293.45 264.35Q300.85 263.75 301.9 258.45 302.75
+ 254.35 298.25 251.9 295 249.95 294.85 244.8L294.85 231.05Q294.85 218.7 286.45 209.95 282.7 206.1 279.05 204ZM278.725 251.15Q278.75 251.41758 278.75 251.7 278.75 251.75039 278.75 251.8 278.71426 253.28574 277.65 254.35 276.55 255.45 275 255.45
+ 273.45 255.45 272.35 254.35 271.28574 253.28574 271.25 251.8 271.25 251.75039 271.25 251.7 271.25 251.41758 271.275 251.15 271.45039 249.94961 272.35 249.05 273.45 247.95 275 247.95 276.55 247.95 277.65 249.05 278.54961 249.94961 278.725 251.15Z">
+        <fill>
+          <SolidColor color="#83C1E8"/>
+        </fill>
+      </Path>
+      <Path data="M293.45 264.35 283.175 264.35Q282.65508 267.06602 280.95 269.15 278.5 272.2 275 272.2 271.5 272.2 269.05 269.15 267.34492 267.06602 266.85 264.35L256.2 264.35Q255.35957 264.3043 254.6 264.2 254.39727 264.1707 254.2 264.125 250.61035 263.51973
+ 248.95 261.4 248.72754 261.11387 248.55 260.8 247.97207 259.85078 247.725 258.65 246.87832 254.56719 251.4 252.075 254.67109 250.15879 254.8 245L254.8 231.25Q254.8 218.9 263.2 210.15 266.92637 206.28008 270.6 204.2 270.77793 204.09375 270.95
+ 204 273.35996 203.75 275 203.75 276.65176 203.75 279.05 204 282.7 206.1 286.45 209.95 294.85 218.7 294.85 231.05L294.85 244.8Q295 249.95 298.25 251.9 302.75 254.35 301.9 258.45 300.85 263.75 293.45 264.35ZM278.725 251.15Q278.54961 249.94961
+ 277.65 249.05 276.55 247.95 275 247.95 273.45 247.95 272.35 249.05 271.45039 249.94961 271.275 251.15 271.25 251.41758 271.25 251.7 271.25 251.75039 271.25 251.8 271.28574 253.28574 272.35 254.35 273.45 255.45 275 255.45 276.55 255.45 277.65
+ 254.35 278.71426 253.28574 278.75 251.8 278.75 251.75039 278.75 251.7 278.75 251.41758 278.725 251.15Z">
+        <fill>
+          <SolidColor color="#ACDAFE"/>
+        </fill>
+      </Path>
+      <Path data="M256.2 264.35 248.2 264.35Q248.09941 264.3498 248 264.35 246.82344 264.33633 245.8 264.2 238.51914 263.24434 239 256.1 239.28438 253.70313 241.7 253.05 246.1127 251.54375 246.25 245.75L246.25 232.5Q246.25 220.6 254.65 212.15 261.25645 205.58242
+ 270.95 204 270.77793 204.09375 270.6 204.2 266.92637 206.28008 263.2 210.15 254.8 218.9 254.8 231.25L254.8 245Q254.67109 250.15879 251.4 252.075 246.87832 254.56719 247.725 258.65 247.97207 259.85078 248.55 260.8 248.72754 261.11387 248.95
+ 261.4 250.61035 263.51973 254.2 264.125 254.39727 264.1707 254.6 264.2 255.35957 264.3043 256.2 264.35Z">
+        <fill>
+          <SolidColor color="#DDF0FF"/>
+        </fill>
+      </Path>
+    </Group>
+  </Group>
+  <Group blendMode="normal" d:type="layer" d:userLabel="Layer 2">
+    <Group flm:isDrawingObject="false">
+      <Path data="M258.9 242.05Q263.75 235 268.8 242.05M271.25 251.7Q271.25 251.41758 271.275 251.15 271.45039 249.94961 272.35 249.05 273.45 247.95 275 247.95 276.55 247.95 277.65 249.05 278.54961 249.94961 278.725 251.15 278.75 251.41758 278.75 251.7M291.1
+ 242.05Q286.25 235 281.2 242.05">
+        <stroke>
+          <SolidColorStroke weight="2" color="#124266"/>
+        </stroke>
+      </Path>
+      <Path data="M303.775 246.6Q303.75371 246.1873 303.75 245.75L303.75 232.5Q303.75 220.6 295.3 212.15 288.45234 205.30234 279.275 204.025 279.16289 204.01484 279.05 204 276.65176 203.75 275 203.75 273.35996 203.75 270.95 204 270.7623 204.03066 270.575 204.075
+ 263.16191 205.35781 257.575 209.6M270.95 204Q270.85 203.57285 270.85 203.1 270.85 201.4 272.05 200.15 273.3 198.95 275 198.95 276.7 198.95 277.9 200.15 279.15 201.4 279.15 203.1 279.15 203.57266 279.05 204M254.2 212.6Q251.85078 215.05723 250.2
+ 217.8M247.5 223.8Q246.25 227.89141 246.25 232.5L246.25 245.75Q246.1127 251.54375 241.7 253.05 239.28438 253.70313 239 256.1 238.51914 263.24434 245.8 264.2 246.28281 264.26426 246.8 264.3M304.975 250.6Q305.2502 251.03145 305.6 251.4 306.60703
+ 252.50703 308.2 253.05 310.6 253.7 310.9 256.1 311.45 264.35 301.7 264.35L283.175 264.35Q282.65508 267.06602 280.95 269.15 278.5 272.2 275 272.2 271.5 272.2 269.05 269.15 267.34492 267.06602 266.85 264.35L254.4 264.35M266.85 264.35 283.175
+ 264.35">
+        <stroke>
+          <SolidColorStroke weight="3" color="#124266"/>
+        </stroke>
+      </Path>
+    </Group>
+  </Group>
+  <Group blendMode="normal" d:type="layer" d:userLabel="Layer 5">
+    <Group flm:isDrawingObject="false">
+      <Path data="M240.65 193.5Q239.9 192.75 239.9 191.65 239.9 190.55 240.65 189.75 241.45 189 242.55 189 243.65 189 244.4 189.75 245.2 190.55 245.2 191.65 245.2 192.75 244.4 193.5 243.65 194.3 242.55 194.3 241.45 194.3 240.65 193.5ZM258.8 195.95Q259.3 195.95
+ 259.65 196.3 260 196.65 260 197.15 260 197.65 259.65 198 259.3 198.35 258.8 198.35 258.3 198.35 257.95 198 257.6 197.65 257.6 197.15 257.6 196.65 257.95 196.3 258.3 195.95 258.8 195.95ZM312.9 196Q312.9 196.75 312.35 197.3 311.8 197.85 311.05
+ 197.85 310.3 197.85 309.75 197.3 309.2 196.75 309.2 196 309.2 195.25 309.75 194.7 310.3 194.15 311.05 194.15 311.8 194.15 312.35 194.7 312.9 195.25 312.9 196Z">
+        <fill>
+          <SolidColor color="#124266" alpha="0.74901962"/>
+        </fill>
+      </Path>
+      <Path data="M290.7 180.75Q289.9 181.55 288.8 181.55 287.7 181.55 286.9 180.75 286.1 179.95 286.1 178.85 286.1 177.75 286.9 176.95 287.7 176.15 288.8 176.15 289.9 176.15 290.7 176.95 291.5 177.75 291.5 178.85 291.5 179.95 290.7 180.75ZM287.55 197.4Q287.1
+ 197.85 286.5 197.85 285.9 197.85 285.45 197.4 285 196.95 285 196.35 285 195.75 285.45 195.3 285.9 194.85 286.5 194.85 287.1 194.85 287.55 195.3 288 195.75 288 196.35 288 196.95 287.55 197.4ZM315.65 235.4Q315.05 236.05 314.15 236.05 313.25 236.05
+ 312.6 235.4 312 234.8 312 233.9 312 233 312.6 232.35 313.25 231.75 314.15 231.75 315.05 231.75 315.65 232.35 316.3 233 316.3 233.9 316.3 234.8 315.65 235.4ZM236.8 226.85Q236.35 227.35 235.65 227.35 234.95 227.35 234.45 226.85 234 226.4 234
+ 225.7 234 225 234.45 224.5 234.95 224.05 235.65 224.05 236.35 224.05 236.8 224.5 237.3 225 237.3 225.7 237.3 226.4 236.8 226.85Z">
+        <fill>
+          <SolidColor color="#124266" alpha="0.49803922"/>
+        </fill>
+      </Path>
+      <Path data="M278.4 188.6Q278.4 189.1 278.05 189.45 277.7 189.8 277.2 189.8 276.7 189.8 276.35 189.45 276 189.1 276 188.6 276 188.1 276.35 187.75 276.7 187.4 277.2 187.4 277.7 187.4 278.05 187.75 278.4 188.1 278.4 188.6ZM301.4 190.2Q301.4 190.8 301 191.2
+ 300.6 191.6 300 191.6 299.4 191.6 299 191.2 298.6 190.8 298.6 190.2 298.6 189.6 299 189.2 299.4 188.8 300 188.8 300.6 188.8 301 189.2 301.4 189.6 301.4 190.2Z">
+        <fill>
+          <SolidColor color="#124266" alpha="0.24705882"/>
+        </fill>
+      </Path>
+      <Path data="M275 290.6Q289.05 290.6 298.95 291.1 308.9 291.6 308.9 292.3 308.9 293 298.95 293.5 289.05 294 275 294 260.95 294 251 293.5 241.1 293 241.1 292.3 241.1 291.6 251 291.1 260.95 290.6 275 290.6Z">
+        <fill>
+          <SolidColor color="#D1D4D9"/>
+        </fill>
+      </Path>
+    </Group>
+    <RichText scaleX="0.48420715" scaleY="0.48420715" x="302.82346" y="211.63159" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" fontFamily="Arial" whiteSpaceCollapse="preserve" locale="en_IL" pd:antiAlias="advanced" pd:editPolicy="readOnly" pd:embedFonts="1" xmlns:pd="http://ns.adobe.com/xfl/2008/pd">
+      <content><p textAlign="center" fontFamily="Arial"><span fontFamily="League Spartan" lineHeight="141.66667%" color="#124266">Z</span></p></content>
+    </RichText>
+    <RichText scaleX="0.75944519" scaleY="0.75944519" x="313.41394" y="199.63111" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" fontFamily="Arial" whiteSpaceCollapse="preserve" locale="en_IL" pd:antiAlias="advanced" pd:editPolicy="readOnly" pd:embedFonts="1" xmlns:pd="http://ns.adobe.com/xfl/2008/pd">
+      <content><p textAlign="center" fontFamily="Arial"><span fontFamily="League Spartan" lineHeight="141.66667%" color="#124266">Z</span></p></content>
+    </RichText>
+    <RichText scaleX="1.2207031" scaleY="1.2207031" x="327.4457" y="184.35859" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" fontFamily="Arial" whiteSpaceCollapse="preserve" locale="en_IL" pd:antiAlias="advanced" pd:editPolicy="readOnly" pd:embedFonts="1" xmlns:pd="http://ns.adobe.com/xfl/2008/pd">
+      <content><p textAlign="center" fontFamily="Arial"><span fontFamily="League Spartan" lineHeight="141.66667%" color="#124266">Z</span></p></content>
+    </RichText>
+    <RichText scaleX="2.1105194" scaleY="2.1105194" x="251.34428" y="173.87896" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" fontFamily="Arial" whiteSpaceCollapse="preserve" locale="en_IL" pd:antiAlias="advanced" pd:editPolicy="readOnly" pd:embedFonts="1" xmlns:pd="http://ns.adobe.com/xfl/2008/pd">
+      <content><p textAlign="center" fontFamily="Arial"><span fontFamily="League Spartan" lineHeight="141.66667%" color="#124266">*</span></p></content>
+    </RichText>
+    <RichText scaleX="1.3242645" scaleY="1.3242645" x="234.20146" y="204.35147" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" fontFamily="Arial" whiteSpaceCollapse="preserve" locale="en_IL" pd:antiAlias="advanced" pd:editPolicy="readOnly" pd:embedFonts="1" xmlns:pd="http://ns.adobe.com/xfl/2008/pd">
+      <content><p textAlign="center" fontFamily="Arial"><span fontFamily="League Spartan" lineHeight="141.66667%" color="#124266">*</span></p></content>
+    </RichText>
+    <RichText x="208" y="307.4" paddingLeft="2" paddingRight="2" paddingTop="2" paddingBottom="2" fontFamily="Arial" whiteSpaceCollapse="preserve" locale="en_IL" pd:antiAlias="advanced" pd:editPolicy="readOnly" pd:embedFonts="1" xmlns:pd="http://ns.adobe.com/xfl/2008/pd">
+      <content><p textAlign="center" fontFamily="Arial"><span fontFamily="League Spartan" lineHeight="141.66667%" color="#79818C">You have no callcard</span></p></content>
+    </RichText>
+  </Group>
+  <Private>
+      <d:FontMap>
+        <d:Map fontFamily="Arial" fontStyle="normal" fontWeight="normal" postScriptName="ArialMT"/>
+        <d:Map fontFamily="League Spartan" fontStyle="normal" fontWeight="normal" postScriptName="LeagueSpartan-Bold"/>
+      </d:FontMap>
+      <xfl:PrivateElement d:ref="#1" xmlns:xfl="http://ns.adobe.com/xfl/2008/">
+        <xfl:publishSettings xfl:source=""/>
+        <xfl:mobileSettings xfl:source=""/>
+        <xfl:as3ExportItems/>
+      </xfl:PrivateElement>
+    </Private>
+  </Graphic>

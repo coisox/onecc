@@ -1,0 +1,166 @@
+<div class="additionalFilter">
+	Filter:
+	<span>
+		<input name="filter" type="radio" id="filterAll" value="filterAll">
+		<label for="filterAll">All</label>
+	</span>
+	<span>
+		<input name="filter" type="radio" id="filterActive" value="filterActive" checked>
+		<label for="filterActive">Active</label>
+	</span>
+	<span>
+		<input name="filter" type="radio" id="filterUnassigned" value="filterUnassigned">
+		<label for="filterUnassigned">Unassigned</label>
+	</span>
+	<span>
+		<input name="filter" type="radio" id="filterHistory" value="filterHistory">
+		<label for="filterHistory">History</label>
+	</span>
+</div>
+	
+<table id="dtCallcard" class="display">
+	<thead>
+		<tr>
+			<th width="70">Callcard</th>
+			<th>Caller</th>
+			<th>Patient Name</th>
+			<th>Event Code</th>
+			<th>Priority</th>
+			<th width="300">Incident Location</th>
+			<th>Filing Type</th>
+			<th width="75">Action</th>
+			<th>Responder</th>
+			<th width="200">Responder Status</th>
+		</tr>
+	</thead>
+	<tbody></tbody>
+</table>
+
+<div class="fixed-action-btn" accesscontrol="admin gdu" title="Add Callcard">
+	<a class="btn-floating btn-large pink" href="javascript:;" onclick="addCallcard()">
+		<i class="material-icons">add_alert</i>
+	</a>
+</div>
+
+<script>
+	$('[accesscontrol*='+profile.user_roles+']').show(); //Access Control
+	var dtCallcard;
+	
+	$(document).ready(function(){
+		loadData();
+		$('[name=filter]').change(function(){ dtCallcard.ajax.reload(null, true); });
+	});
+	
+	function loadData() {
+		dtCallcard = $('#dtCallcard').DataTable({
+			ajax: {
+				"url": "api/getCallcard.php",
+				"type": "GET",
+				"data": function(d) {
+					return "filter="+$('[name=filter]:checked').val();
+				}
+			},
+			searching: true,
+			bSortClasses: false,
+			lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "All"]],
+			iDisplayLength: 5,
+			columns: [
+				{ "data": "callcard_id" },
+				{ "data": null, render:
+					function(data, type, rowData, meta) {
+						return rowData.callcard_caller_name+'<br>Tel: '+rowData.callcard_caller_phone+'<br>Type: '+rowData.patienttype_desc;
+					}
+				},
+				{ "data": "callcard_patient_name" },
+				{ "data": "eventcode_code" },
+				{ "data": "eventtype_desc" },
+				{ "data": null, render:
+					function(data, type, rowData, meta) {
+						return rowData.callcard_incident_address+'<br><br>GPS: '+rowData.callcard_incident_coordinate+'<br>Type: '+rowData.locationtype_desc;
+					}
+				},
+				{ "data": "filingtype_desc" },
+				{ "data": null, "className": "center", render:
+					function(data, type, rowData, meta) {
+						var h =
+							(rowData.callcard_status=='activeCallcard'?
+								'<a href="javascript:;" title="Edit" onclick="editCallcard('+rowData.dtRow+')"><i class="material-icons">edit</i></a><br>'+
+								'<a href="javascript:;" title="Manage Responder" onclick="manageResponder(\''+rowData.callcard_id+'\')"><i class="material-icons">person_pin</i></a><br>'
+								:
+								''
+							)+
+							'<a href="javascript:;" title="Photo Gallery" onclick="showPhoto(\''+rowData.callcard_id+'\')"><i class="material-icons">insert_photo</i></a><br>'+
+							'<a href="javascript:;" title="Chatroom" onclick="openChat(\''+rowData.callcard_id+'\', \''+rowData.callcard_status+'\')"><i class="material-icons">chat</i></a><br>'+
+							'<a href="javascript:;" title="Status Log" onclick="modalDatatables('+rowData.dtRow+', \'arr_statuslog\', \'dtCallcard\', true)"><i class="material-icons">view_list</i></a>'
+						return h;
+					}
+				},
+				{ "data": null, render:
+					function(data, type, rowData, meta) {
+						var h = '';
+						if(rowData.arr_responders.length>0) {
+							for(var i=0; i<rowData.arr_responders.length; i++) {
+								h += '<div class="multirow">'+rowData.arr_responders[i].resource_name+'<br>Tel: '+rowData.arr_responders[i].resource_phone+'</div>';
+							}
+						}
+						return h;
+					}
+				},
+				{ "data": null, render:
+					function(data, type, rowData, meta) {
+						var h = '';
+						if(rowData.arr_responders.length>0) {
+							for(var i=0; i<rowData.arr_responders.length; i++) {
+								h +=
+									'<div class="multirow">'+
+										'<img class="select_icon '+rowData.arr_responders[i].statustype_color+'" src="img/'+rowData.arr_responders[i].statustype_icon+'">'+
+										localStorage.getItem('1cc_lovStatusType')
+											.replace('<select', '<select onchange="updateStatus(\''+rowData.arr_responders[i].responder_id+'\')" callcard_id="'+rowData.callcard_id+'" responder_id="'+rowData.arr_responders[i].responder_id+'" prev_statustype_code="'+rowData.arr_responders[i].statustype_code+'" prev_statustype_order="'+rowData.arr_responders[i].statustype_order+'"'+(rowData.arr_responders[i].statustype_code=='completed'?' disabled':'')+(rowData.callcard_status=='activeCallcard'?'':' disabled'))
+											.replace('option value="'+rowData.arr_responders[i].statustype_code+'"', 'option value="'+rowData.arr_responders[i].statustype_code+'" selected')+
+									'</div>';
+							}
+						}
+						return h;
+					}
+				}
+			]
+		}).on('draw.dt', function() {
+			$('#dtCallcard select').material_select();
+		}).on('init.dt', function() {
+			if(window.location.hash.indexOf('=')>-1) dtCallcard.search(window.location.hash.split('=')[1]).draw();
+		}).on('xhr.dt', function(e, settings, data, xhr) {
+			if(data.status!='ok') {
+				Materialize.toast(data.status, 4000);
+			}
+		});
+	}
+
+	function updateFilingType(callcard_id, callcard_filingtype_code) {
+		$.getJSON("api/setFilingType.php", "callcard_id="+callcard_id+"&callcard_filingtype_code="+callcard_filingtype_code, function(data) {
+			if(data.status!='ok') modalSimple(data.status);
+		});
+	}
+	
+	function editCallcard(dtRow) {
+		$('#modal_callcard form')[0].reset();
+		$('#modal_callcard .modal-title').text('Edit Callcard '+dtCallcard.context[0].aoData[dtRow]._aData.callcard_id);
+		
+		$('#callcard_id').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_id);
+		$('#callcard_caller_name').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_caller_name);
+		$('#callcard_caller_phone').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_caller_phone);
+		$('#callcard_patienttype_code').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_patienttype_code);
+		$('#callcard_notes').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_notes).attr('disabled', 'disabled');
+		$('#callcard_patient_name').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_patient_name);
+		$('#callcard_eventtype_code').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_eventtype_code);
+		$('#callcard_locationtype_code').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_locationtype_code);
+		$('#callcard_incident_address').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_incident_address);
+		$('#callcard_incident_coordinate').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_incident_coordinate);
+		$('#callcard_filingtype_code').val(dtCallcard.context[0].aoData[dtRow]._aData.callcard_filingtype_code);
+
+		ac_eventcode.setValue(dtCallcard.context[0].aoData[dtRow]._aData.callcard_eventcode_code); //set autocomplete
+
+		$('#modal_callcard select').not($('#callcard_eventcode_code')).material_select();
+		Materialize.updateTextFields();
+		$('#modal_callcard').modal('open');
+	}
+</script>

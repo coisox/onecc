@@ -1,0 +1,141 @@
+<svg class="icon_back" onclick="back()" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 129 129" enable-background="new 0 0 129 129" width="40px" height="40px">
+  <g>
+    <g>
+      <path d="m64.5,122.6c32,0 58.1-26 58.1-58.1s-26-58-58.1-58-58,26-58,58 26,58.1 58,58.1zm0-108c27.5,5.32907e-15 49.9,22.4 49.9,49.9s-22.4,49.9-49.9,49.9-49.9-22.4-49.9-49.9 22.4-49.9 49.9-49.9z" fill="#E0E0E0"/>
+      <path d="m70,93.5c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2 1.6-1.6 1.6-4.2 0-5.8l-23.5-23.5 23.5-23.5c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-26.4,26.4c-0.8,0.8-1.2,1.8-1.2,2.9s0.4,2.1 1.2,2.9l26.4,26.4z" fill="#E0E0E0"/>
+    </g>
+  </g>
+</svg>
+
+<div class="row">
+	<div class="col s6">
+		<div class="title">
+			Responders for Callcard <span id="callcard_id"></span>
+		</div>
+		<table id="dtResponder" class="display">
+			<thead>
+				<tr>
+					<th>Resource Type</th>
+					<th>Responder</th>
+					<th width="200">Responder Status</th>
+					<th class="center">Remove</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+	<div class="col s6">
+		<div class="title">
+			Available Resources
+		</div>
+		<table id="dtResource" class="display">
+			<thead>
+				<tr>
+					<th class="center">Add</th>
+					<th>Resource Type</th>
+					<th>Responder</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+</div>
+
+<script>
+	var dtResponder, dtResource;
+	$('#callcard_id').text(manageId);
+	
+	$(document).ready(function(){
+		loadLeft();
+		loadRight();
+	});
+	
+	function loadLeft() {
+		dtResponder = $('#dtResponder').DataTable({
+			ajax: "api/getResponder.php?callcard_id="+manageId,
+			searching: true,
+			bSortClasses: false,
+			lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "All"]],
+			iDisplayLength: 10,
+			columns: [
+				{ "data": "resourcetype_desc" },
+				{ "data": "resource" },
+				{ "data": null, render:
+					function(data, type, rowData, meta) {
+						var h =
+							'<div class="multirow">'+
+								'<img class="select_icon '+rowData.statustype_color+'" src="img/'+rowData.statustype_icon+'">'+
+								localStorage.getItem('1cc_lovStatusType')
+									.replace('<select', '<select onchange="updateStatus(\''+rowData.responder_id+'\')" callcard_id="'+manageId+'"  responder_id="'+rowData.responder_id+'" prev_statustype_code="'+rowData.responder_statustype_code+'" prev_statustype_order="'+rowData.statustype_order+'" '+(rowData.responder_statustype_code=='completed'?'disabled':''))
+									.replace('option value="'+rowData.responder_statustype_code+'"', 'option value="'+rowData.responder_statustype_code+'" selected')+
+							'</div>';
+						return h;
+					}
+				},
+				{ "data": "action", "className": "center" }
+			],
+			columnDefs: [{
+				"targets": -1,
+				"orderable": false
+			}]
+		}).on('draw.dt', function() {
+			$('#dtResponder select').material_select();
+		}).on('xhr.dt', function(e, settings, data, xhr) {
+			if(data.status!='ok') {
+				Materialize.toast(data.status, 4000);
+			}
+		});
+	}
+
+	function loadRight() {
+		dtResource = $('#dtResource').DataTable({
+			ajax: "api/getFreeResource.php?callcard_id="+manageId,
+			searching: true,
+			bSortClasses: false,
+			lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "All"]],
+			iDisplayLength: 10,
+			order: [[1, "asc"]],
+			columns: [
+				{ "data": "action", "className": "center" },
+				{ "data": "resourcetype_desc" },
+				{ "data": "resource" }
+			],
+			columnDefs: [{
+				"targets": 0,
+				"orderable": false
+			}]
+		}).on('xhr.dt', function(e, settings, data, xhr) {
+			if(data.status!='ok') {
+				Materialize.toast(data.status, 4000);
+			}
+		});
+	}
+	
+	var move_direction, move_resource_nric_or_reg, move_responder_id;
+	function move(direction, resource_nric_or_reg, responder_id) {
+		move_direction = direction;
+		move_resource_nric_or_reg = resource_nric_or_reg;
+		move_responder_id = responder_id;
+		
+		if(direction=='right' && $('select[responder_id='+responder_id+']').val()!='new') {
+			$('#modal_move_right').modal('open');
+		}
+		else {
+			moveProceed();
+		}
+	}
+	
+	function moveProceed() {
+		$.getJSON("api/setResponder.php", "callcard_id="+manageId+"&resource_nric_or_reg="+move_resource_nric_or_reg+"&responder_id="+move_responder_id+"&direction="+move_direction, function(data) {
+			if(data.status!='ok') modalSimple(data.status);
+			else {
+				//dtResponder.ajax.reload(null, false);
+				//dtResource.ajax.reload(null, false);
+			}
+		});
+	}
+	
+	function back() {
+		$('[href="#callcard_list"]').click();
+	}
+</script>

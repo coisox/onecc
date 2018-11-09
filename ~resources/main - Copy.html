@@ -1,0 +1,861 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+		<title>1CC</title>
+		<link rel="icon" href="img/favicon.png">
+		<link rel="stylesheet" href="lib/materialize-v0.98.2/css/materialize.min.css">
+		<link rel="stylesheet" href="lib/material-datetime-picker/material-datetime-picker.css">
+		<link rel="stylesheet" href="lib/material-datetime-picker/custom.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" type="text/css" href="lib/datatables/datatables.css"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/css/selectize.default.min.css" >
+		<link rel="stylesheet" href="css/custom.css">
+	</head>
+	<body class="pgMain">
+		<div class="navbar-fixed">
+			<nav>
+				<div class="nav-wrapper">
+					<a class="brand-logo"><img class="logo" src="img/logo_1cc.svg"></a>
+					<ul class="left mynav" style="margin-left:65px">
+						<li><a href="#manage_resources" onclick="activeMenu('#manage_resources')" accesscontrol="admin gmc">Manage Resources</a></li>
+						<li><a href="#callcard_list" onclick="activeMenu('#callcard_list')" accesscontrol="admin gdu">Callcard List</a></li>
+						<li class="active"><a href="#map" onclick="activeMenu('#map')">Map</a></li>
+					</ul>
+					<ul class="right statcard">
+						<li class="purple lighten-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="<b>Assigned Callcard</b><br>Number of callcard that has at least 1 responder dispatched."><div class="stat-title">Assigned Callcard</div><div class="stat-data" id="stat_assigned"></div></li>
+						<li class="lime darken-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="<b>Unassigned Callcard</b><br>Number of callcard that has no responder dispatched."><div class="stat-title">Unassigned Callcard</div><div class="stat-data" id="stat_unassigned"></div></li>
+						<li class="yellow darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="<b>Unanswered Callcard</b><br>Number of callcard that has responder dispatched, but it hasn't been acknowledged."><div class="stat-title">Unanswered Callcard</div><div class="stat-data" id="stat_unanswered"></div></li>
+						<li data-activates="sidenav" class="sidenav deep-orange darken-1"><div id="profile"></div></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+		<div class="page-content"></div>
+		
+		<!--====================================================================================================Modal Callcard-->
+		<div id="modal_callcard" class="modal modal-fixed-footer">
+			<div class="modal-title"></div>
+			<form class="row">
+				<input id="callcard_id" name="callcard_id"  type="hidden">
+				<div class="col s12">
+					<div class="input-field col s6">
+						<input id="callcard_caller_name" name="callcard_caller_name" class="uppercase" type="text" required>
+						<label for="callcard_caller_name">Caller Name <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s6">
+						<input id="callcard_patient_name" name="callcard_patient_name" class="uppercase" type="text" required>
+						<label for="callcard_patient_name">Patient Name <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s6">
+						<input id="callcard_caller_phone" name="callcard_caller_phone" type="text" required>
+						<label for="callcard_caller_phone">Caller Phone <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s6">
+						<select name="callcard_patienttype_code" id="callcard_patienttype_code" required></select>
+						<label>Patient Type <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s12">
+						<div class="customlabel">Event Code <span class="required">*</span></div>
+						<select name="callcard_eventcode_code" id="callcard_eventcode_code" required></select>
+					</div>
+					<div class="input-field col s6">
+						<select name="callcard_eventtype_code" id="callcard_eventtype_code" required></select>
+						<label>Priority Level <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s6">
+						<select name="callcard_locationtype_code" id="callcard_locationtype_code" required></select>
+						<label>Location Type <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s6">
+						<textarea id="callcard_notes" name="callcard_notes" class="materialize-textarea"></textarea>
+						<label for="callcard_notes">Notes</label>
+					</div>
+					<div class="input-field col s6">
+						<textarea id="callcard_incident_address" name="callcard_incident_address" class="materialize-textarea" required></textarea>
+						<label for="callcard_incident_address">Incident Address <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s6">
+						<select name="callcard_filingtype_code" id="callcard_filingtype_code"></select>
+						<label>Filing Type</label>
+					</div>
+					<div class="input-field col s6">
+						<input id="callcard_incident_coordinate" name="callcard_incident_coordinate" class="uppercase" type="text" required>
+						<label for="callcard_incident_coordinate">Incident Coordinate (GPS) <span class="required">*</span></label>
+					</div>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<a href="javascript:;" class="modal-action waves-effect waves-green btn-flat" onclick="setCallcard(1)">Submit & Assign</a>
+				<a href="javascript:;" class="modal-action waves-effect waves-green btn-flat" onclick="setCallcard(0)">Submit</a>
+			</div>
+		</div>
+		
+		<!--====================================================================================================Modal Resource-->
+		<div id="modal_resource" class="modal modal-fixed-footer">
+			<div class="modal-title"></div>
+			<form class="row">
+				<input type="hidden" id="resource_id" name="resource_id">
+				<div class="col s12">
+					<div class="input-field col s6">
+						<select name="resource_resourcetype_code" id="resource_resourcetype_code" required></select>
+						<label>Resource Type <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s6">
+						<input id="resource_nric_or_reg" name="resource_nric_or_reg" type="text" required>
+						<label for="resource_nric_or_reg">NRIC / Vehicle Number <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s6" id="div_resource_name">
+						<input id="resource_name" name="resource_name" class="uppercase" type="text" required>
+						<label for="resource_name">Name / Team Lead / Vehicle Number <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s6">
+						<input id="resource_phone" name="resource_phone" type="text">
+						<label for="resource_phone">Phone</label>
+					</div>
+					<div class="input-field col s6">
+						<input id="resource_availability_from" name="resource_availability_from" type="text" onclick="datetimepicker_from(this.value)" readonly>
+						<label for="resource_availability_from">Availability From</label>
+					</div>
+					<div class="input-field col s6">
+						<input id="resource_availability_to" name="resource_availability_to" type="text" onclick="datetimepicker_to(this.value)" readonly>
+						<label for="resource_availability_to">Availability To</label>
+					</div>
+					<div class="input-field col s12">
+						<select name="resource_venue_id" id="resource_venue_id" required></select>
+						<label>Standby Venue <span class="required">*</span></label>
+					</div>
+					<div class="input-field col s6">
+						<input id="resource_standby_location" name="resource_standby_location" type="text">
+						<label for="resource_standby_location">Standby Location (GPS)</label>
+					</div>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<a href="javascript:;" class="modal-action waves-effect waves-green btn-flat" onclick="setResource(0)">Submit</a>
+			</div>
+		</div>
+		
+		<!--====================================================================================================Modal Import Excel-->
+		<div id="modal_import" class="modal modal-fixed-footer">
+			<div class="modal-title">Import Deployment Plan From Excel</div>
+			<form class="row">
+				<div class="col s12">
+					<div class="input-field file-field col s12">
+						<div class="btn light-blue darken-1">
+							<span><a class="waves-effect waves-light white-text see-through"><i class="material-icons left">insert_drive_file</i>Browse</a></span>
+							<input type="file" id="importExcel" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+						</div>
+						<div class="file-path-wrapper">
+							<input class="file-path validate" type="text">
+						</div>
+					</div>
+				</div>
+				<div class="col s12"><b style="margin-left:177px;">Result: &nbsp; &nbsp; &nbsp;</b><span id="importResult">Waiting for user action...<a href="javascript:;" class="downloadReport"><i class="material-icons">file_download</i></a></span></div>
+				<div class="col s12">&nbsp;</div>
+			</form>
+			<div class="modal-footer">
+				<a href="javascript:;" class="modal-action waves-effect waves-green btn-flat" onclick="importExcel()">Import Now</a>
+			</div>
+		</div>
+		
+		<!--====================================================================================================Modal Resource Delete-->
+		<div id="modal_resource_delete" class="modal modal-confirm red white-text">
+			<form class="row">
+				<div class="col s12">
+					Are you sure to delete this item?
+				</div>
+			</form>
+			<div class="modal-footer red">
+				<a href="javascript:;" class="modal-action btn-flat white-text" onclick="setResource(1)">Yes</a>
+				<a href="javascript:;" class="modal-action modal-close btn-flat white-text">Cancel</a>
+			</div>
+		</div>
+		
+		<!--====================================================================================================Modal Rollback Status-->
+		<div id="modal_rollback_status" class="modal modal-confirm red white-text">
+			<form class="row">
+				<div class="col s12">
+					Are you sure to rollback this status?
+				</div>
+			</form>
+			<div class="modal-footer red">
+				<a href="javascript:;" class="modal-action modal-close btn-flat white-text" onclick="updateStatusProceed()">Yes</a>
+				<a href="javascript:;" class="modal-action modal-close btn-flat white-text" onclick="updateStatusCancel()">Cancel</a>
+			</div>
+		</div>
+		
+		<!--====================================================================================================Modal Move Right-->
+		<div id="modal_move_right" class="modal modal-confirm red white-text">
+			<form class="row">
+				<div class="col s12">
+					The responder has already being dispatched. Are you sure to detach it from the Callcard? This cannot be undone.
+				</div>
+			</form>
+			<div class="modal-footer red">
+				<a href="javascript:;" class="modal-action modal-close btn-flat white-text" onclick="moveProceed()">Yes</a>
+				<a href="javascript:;" class="modal-action modal-close btn-flat white-text">Cancel</a>
+			</div>
+		</div>
+		
+		<!--====================================================================================================Modal Change Password -->
+		<div id="modal_change_login" class="modal modal-fixed-footer">
+			<div class="modal-title">Change Password</div>
+			<form class="row">
+				<div class="col s12">
+					<div class="input-field col s12">
+						<input id="old_password" type="password">
+						<label for="old_password">Old Password</label>
+					</div>
+					<div class="input-field col s12">
+						<input id="new_password" type="password">
+						<label for="new_password">New Password</label>
+					</div>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<a href="javascript:;" class="modal-action btn-flat" onclick="updatePassword()">Save</a>
+				<a href="javascript:;" class="modal-action modal-close btn-flat">Cancel</a>
+			</div>
+		</div>
+		
+		<!--====================================================================================================Modal Change Name -->
+		<div id="modal_change_name" class="modal modal-fixed-footer">
+			<div class="modal-title">Change Display Name</div>
+			<form class="row">
+				<div class="col s12">
+					<div class="input-field col s12">
+						<input id="desiredname" type="text" maxlength="12">
+						<label for="desiredname">Display Name (Max 12 character)</label>
+					</div>
+				</div>
+			</form>
+			<div class="modal-footer">
+				<a href="javascript:;" class="modal-action btn-flat" onclick="updateName()">Save</a>
+				<a href="javascript:;" class="modal-action modal-close btn-flat">Cancel</a>
+			</div>
+		</div>
+		
+		<!--====================================================================================================Modal Simple-->
+		<div id="modal_simple" class="modal"></div>
+		
+		<!--====================================================================================================Modal Warning-->
+		<div id="modal_warning" class="modal red white-text"></div>
+		
+		<!--====================================================================================================Sidenav-->
+		<ul id="sidenav" class="side-nav">
+			<div id="profile" class="side-nav-title deep-orange darken-1"></div>
+			<!--<li><a href="#modal_enter_behavior"><i class="material-icons">subdirectory_arrow_left</i> Enter Behavior</a></li>-->
+			<li><a href="javascript:;" onclick="openModalName()"><i class="material-icons">face</i> Change Display Name</a></li>
+			<li><a href="javascript:;" onclick="openModalPassword()"><i class="material-icons">lock_outline</i> Change Password</a></li>
+			<li><a href="index.html"><i class="material-icons">power_settings_new</i> Logout</a></li>
+			<div class="side-nav-footer deep-orange darken-1"></div>
+		</ul>
+
+		<script src='lib/jquery.min.js'></script>
+		<script src='lib/materialize-v0.98.2/js/materialize.min.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/rome/2.1.22/rome.standalone.js'></script>
+		<script src='lib/material-datetime-picker/material-datetime-picker.js'></script>
+		<script src='lib/datatables/datatables.js'></script>
+		<script src='https://www.gstatic.com/firebasejs/3.9.0/firebase.js'></script>
+		<script src='lib/xlsx.full.min.js'></script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.4/js/standalone/selectize.min.js'></script>
+		<script src='lib/markerclusterer.js'></script>
+
+		<script>
+			// Initialize Firebase
+			var config = {
+				apiKey: "AIzaSyDLEqpyMeN74anGWtsV_93grGn5c3VKe1E",
+				authDomain: "sea-games.firebaseapp.com",
+				databaseURL: "https://sea-games.firebaseio.com",
+				projectId: "sea-games",
+				storageBucket: "sea-games.appspot.com",
+				messagingSenderId: "208616034779"
+			};
+			firebase.initializeApp(config);
+		</script>
+		<script>
+			//========================================================================================================================= General Start
+			var profile = JSON.parse(localStorage.getItem('1cc_profile'));
+			if(profile==null) window.location = 'index.html';
+			$('[id=profile]').html('<span id="user_fullname">'+profile.user_fullname+'</span><br><span>Role: '+profile.user_roles+'</span>');
+			$('[accesscontrol*='+profile.user_roles+']').show(); //Access Control
+			
+			if(window.location.hash=='') $('nav li.active a').click();
+			else $('a[href="'+window.location.hash.split('=')[0]+'"]').click();
+			
+			$(document).ready(function(){
+				$('.modal').modal();
+				$('#modal_rollback_status').modal({dismissible:false});
+				$(".sidenav").sideNav({edge: 'right'});
+				
+				getVenue();
+				getPatientType();
+				getResourceType();
+				getStatusType();
+				getEventType();
+				getFilingType();
+				getLocationType();
+				getEventCode();
+				
+				InitDatetimePicker();
+			});
+
+			function getStat() {
+				$.getJSON("api/getStat.php", function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						$('#stat_unassigned').text(data.data.stat_unassigned);
+						$('#stat_assigned').text(data.data.stat_assigned);
+						$('#stat_unanswered').text(data.data.stat_unanswered);
+						
+						//animate them
+						setTimeout(function(){ $('.statcard li:nth-child(1)').addClass('ready') }, 500);
+						setTimeout(function(){ $('.statcard li:nth-child(2)').addClass('ready') }, 700);
+						setTimeout(function(){ $('.statcard li:nth-child(3)').addClass('ready') }, 900);
+						setTimeout(function(){ $('.statcard li:nth-child(4)').addClass('ready') }, 1100);
+						
+						setTimeout(function(){ $('.tooltipped').tooltip({delay: 50, html: true}) }, 1300);
+					}
+				});
+			}
+
+			function activeMenu(url) {
+				$('.mynav li').removeClass('active');
+				$('a[href^='+url+']').parent().addClass('active');
+				$('.page-content').load('page_'+url.replace('#','').replace('=','')+'.html');
+			}
+			
+			$('body').on('click', '*', function() {
+				$('.tooltipped').tooltip('remove');
+			});
+			//========================================================================================================================= General End
+			//========================================================================================================================= Lookup Start
+			var jVenue = [];
+			function getVenue() {
+				$.getJSON("api/getVenue.php", function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						jVenue = data.data;
+						
+						var h = '<option value="" disabled selected>Please Select</option>';
+						for(var i in data.data) h += '<option value="'+data.data[i].venue_id+'">'+data.data[i].venue_desc+'</option>';
+						$('#resource_venue_id').html(h).material_select();
+					}
+				});
+			}
+			
+			function getResourceType() {
+				$.getJSON("api/getResourceType.php", function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						var h = '<option value="" disabled selected>Please Select</option>';
+						for(var i in data.data) h += '<option value="'+data.data[i].resourcetype_code+'">'+data.data[i].resourcetype_desc+'</option>';
+						$('#resource_resourcetype_code').html(h).material_select();
+					}
+				});
+			}
+			
+			function getStatusType() {
+				$.getJSON("api/getStatusType.php", function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						var h = '';
+						for(var i in data.data) h += '<option value="'+data.data[i].statustype_code+'" data-icon="img/'+data.data[i].statustype_icon+'" class="left circle '+data.data[i].statustype_color+'" order="'+data.data[i].statustype_order+'">'+data.data[i].statustype_desc+'</option>';
+						localStorage.setItem('1cc_lovStatusType', '<select>'+h+'</select>');
+					}
+				});
+			}
+			
+			function getPatientType() {
+				$.getJSON("api/getPatientType.php", function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						var h = '<option value="" disabled selected>Please Select</option>';
+						for(var i in data.data) h += '<option value="'+data.data[i].patienttype_code+'">'+data.data[i].patienttype_desc+'</option>';
+						$('#callcard_patienttype_code').html(h).material_select();
+					}
+				});
+			}
+			
+			function getEventType() {
+				$.getJSON("api/getEventType.php", function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						var h = '<option value="" disabled selected>Please Select</option>';
+						for(var i in data.data) h += '<option value="'+data.data[i].eventtype_code+'">'+data.data[i].eventtype_desc+'</option>';
+						$('#callcard_eventtype_code').html(h).material_select();
+					}
+				});
+			}
+			
+			function getFilingType() {
+				$.getJSON("api/getFilingType.php", function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						var h = '<option value="" disabled selected>Please Select</option>';
+						for(var i in data.data) h += '<option value="'+data.data[i].filingtype_code+'">'+data.data[i].filingtype_desc+'</option>';
+						localStorage.setItem('1cc_lovFilingType', '<select>'+h+'</select>');
+						$('#callcard_filingtype_code').html(h).material_select();
+					}
+				});
+			}
+			function getLocationType() {
+				$.getJSON("api/getLocationType.php", function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						var h = '<option value="" disabled selected>Please Select</option>';
+						for(var i in data.data) h += '<option value="'+data.data[i].locationtype_code+'">'+data.data[i].locationtype_desc+'</option>';
+						$('#callcard_locationtype_code').html(h).material_select();
+					}
+				});
+			}
+			//========================================================================================================================= Lookup End
+			//========================================================================================================================= Callcard Start
+			function setCallcard(submit_and_assign) {
+				var coordinate = $('#modal_callcard #callcard_incident_coordinate').val().split(',');
+				if($('#modal_callcard #callcard_incident_coordinate').val()!='' && coordinate.length != 2) {
+					modalSimple('Please enter coordinate in Malaysia');
+				}
+				else if(!withinJurisdiction(coordinate.join(','))) {
+					modalWarning('Selected area beyond jurisdiction (coordinate must be within 500 meters from nearest venue)');
+				}
+				else {
+					var myLatLng = new google.maps.LatLng(coordinate[0], coordinate[1]);
+					getAddressByCoordinate(myLatLng, function(address) {
+						if ($('#modal_callcard #callcard_incident_coordinate').val()!='' && address.split(', ').pop() != 'Malaysia') {
+							modalSimple('Please enter coordinate in Malaysia');
+						}
+						else {
+							if($('#modal_callcard form')[0].checkValidity()) {
+								var duration = (new Date()).getSeconds() - timestart.getSeconds();
+								var formattedCoordinate = ($('#modal_callcard #callcard_incident_coordinate').val()==''?'':myLatLng.lat().toFixed(6)+','+myLatLng.lng().toFixed(6));
+
+								$.getJSON("api/setCallcard.php", $('#modal_callcard :input').serialize()+"&duration="+duration+"&formattedCoordinate="+formattedCoordinate, function(data) {
+									if(data.status!='ok') modalSimple(data.status);
+									else {
+										$('#modal_callcard').modal('close');
+										
+										if(submit_and_assign) {
+											manageResponder($('#modal_callcard #callcard_id').val()==''?data.callcard_id:$('#modal_callcard #callcard_id').val());
+										}
+										else {
+											if($('#callcard_id').val()=='') {
+												modalSimple('Your Callcard number is '+data.callcard_id);
+											}
+											else {
+												modalSimple('Callcard updated');
+											}
+										}
+									}
+								});
+							}
+							else {
+								modalSimple('Please fill out required fields');
+							}
+						}
+					});
+				}
+			}
+			
+			var timestart = new Date();
+			function addCallcard(coordinate, address, locationtype) {
+				if(coordinate==null || withinJurisdiction(coordinate)) {
+					timestart = new Date();
+
+					$('#modal_callcard form #callcard_id').val('');
+					$('#modal_callcard form')[0].reset();
+					$('#modal_callcard .modal-title').text('New Callcard');
+					$('#callcard_incident_coordinate').val(coordinate);
+					$('#callcard_incident_address').val(address);
+					$('#callcard_locationtype_code').val(locationtype);
+
+					ac_eventcode.clear(); //reset autocomplete
+					
+					$('#modal_callcard select').not($('#callcard_eventcode_code')).material_select();
+					Materialize.updateTextFields();
+					$('#modal_callcard').modal('open');
+				}
+				else {
+					modalWarning('Selected area beyond jurisdiction (coordinate must be within 500 meters from nearest venue)');
+				}
+			}
+			
+			var manageId = '';
+			function manageResponder(callcard_id) {
+				manageId = callcard_id;
+				$('.page-content').load('page_manage_responder.html');
+			}
+			//========================================================================================================================= Callcard End
+			//========================================================================================================================= Resource Start
+			function setResource(del) {
+				if($('#modal_resource form')[0].checkValidity() || del) {
+					if($('#resource_availability_from').val() > $('#resource_availability_to').val()) {
+						modalSimple('"Availability From" cannot be later than "Availability To"');
+					}
+					else {
+						$.getJSON("api/setResource.php", $('#modal_resource :input').serialize()+"&del="+del, function(data) {
+							if(data.status!='ok') modalSimple(data.status);
+							else {
+								$('#modal_resource').modal('close');
+								$('#modal_resource_delete').modal('close');
+
+								if(data.resource_query_type=='insert') {
+									modalSimple('New resource successfully added');
+								}
+								else if(data.resource_query_type=='update') {
+									modalSimple('Resource successfully updated');
+								}
+							}
+						});
+					}
+				}
+				else {
+					modalSimple('Please fill out required fields');
+				}
+			}
+
+			function addResource() {
+				$('#modal_resource form')[0].reset();
+				$('#modal_resource .modal-title').text('New Resource');
+				$('#resource_id').val("");
+				
+				$('#modal_resource select').material_select();
+				Materialize.updateTextFields();
+				$('#modal_resource').modal('open');
+			}
+			
+			function editResource(dtRow, dtRef) {
+				$('#modal_resource form')[0].reset();
+				$('#modal_resource .modal-title').text('Edit Resource');
+				
+				$('#resource_id').val(eval(dtRef).context[0].aoData[dtRow]._aData.resource_id);
+				$('#resource_nric_or_reg').val(eval(dtRef).context[0].aoData[dtRow]._aData.resource_nric_or_reg);
+				$('#resource_resourcetype_code').val(eval(dtRef).context[0].aoData[dtRow]._aData.resource_resourcetype_code)
+				$('#resource_standby_location').val(eval(dtRef).context[0].aoData[dtRow]._aData.resource_standby_location);
+				$('#resource_name').val(eval(dtRef).context[0].aoData[dtRow]._aData.resource_name);
+				$('#resource_phone').val(eval(dtRef).context[0].aoData[dtRow]._aData.resource_phone);
+				$('#resource_availability_from').val(eval(dtRef).context[0].aoData[dtRow]._aData.resource_availability_from);
+				$('#resource_availability_to').val(eval(dtRef).context[0].aoData[dtRow]._aData.resource_availability_to);
+				$('#resource_venue_id').val(eval(dtRef).context[0].aoData[dtRow]._aData.resource_venue_id)
+
+				$('#modal_resource select').material_select();
+				Materialize.updateTextFields();
+				$('#modal_resource').modal('open');
+			}
+			
+			function deleteResource(dtRow, dtRef) {
+				$('#resource_id').val(eval(dtRef).context[0].aoData[dtRow]._aData.resource_id);
+				$('#modal_resource_delete').modal('open');
+			}
+			//========================================================================================================================= Resource End
+			//========================================================================================================================= Manage Responder Start
+			var updateStatus_Target;
+			function updateStatus(responder_id) {
+				updateStatus_Target = $('select[responder_id='+responder_id+']');
+				if(updateStatus_Target.attr('prev_statustype_order') > updateStatus_Target.find('option:selected').attr('order')) {
+					$('#modal_rollback_status').modal('open');
+				}
+				else {
+					updateStatusProceed();
+				}
+			}
+			
+			function updateStatusProceed() {
+				var isRollback = (updateStatus_Target.attr('prev_statustype_order') > updateStatus_Target.find('option:selected').attr('order')?true:false) ;
+
+				$.getJSON("api/setResponderStatus.php", "callcard_id="+updateStatus_Target.attr('callcard_id')+"&responder_id="+updateStatus_Target.attr('responder_id')+"&responder_statustype_code="+$('select[responder_id='+updateStatus_Target.attr('responder_id')+']').val()+"&isRollback="+isRollback, function(data) {
+					if(data.status!='ok') modalSimple(data.status);
+				});
+			}
+			
+			function updateStatusCancel() {
+				updateStatus_Target.val(updateStatus_Target.attr('prev_statustype_code')).material_select();
+			}
+			//========================================================================================================================= Manage Responder End
+			//========================================================================================================================= Modal Start
+			function modalSimple(text) {
+				$('#modal_simple').text(text).modal('open');
+			}
+			
+			function modalWarning(text) {
+				$('#modal_warning').text(text).modal('open');
+			}
+			
+			function modalDatatables(dtRow, dtColumn, dtRef, html) {
+				var data = eval(dtRef).context[0].aoData[dtRow]._aData[dtColumn];
+				
+				if(dtColumn=='arr_statuslog') {
+					var html_statuslog = [];
+					$.each(data, function(i, statuslog) {
+						html_statuslog.push('<tr><td class="tdLabel">'+statuslog.statuslog_time+'</td><td>:</td><td>'+statuslog.statuslog_desc+'</td></tr>');
+					});
+					data = '<table class="modalStatusLog">'+html_statuslog.join('')+'</table>';
+				}
+				
+				if(html) $('#modal_simple').html(data).modal('open');
+				else $('#modal_simple').text(data).modal('open');
+			}
+			
+			function modalConfirm(text) {
+				$('#modal_confirm').text(text).modal('open');
+			}
+			//========================================================================================================================= Modal End
+			//========================================================================================================================= Datepicker Start
+			var resource_availability_from, resource_availability_to;
+			
+			function InitDatetimePicker() {
+				resource_availability_from = new MaterialDatetimePicker({}).on('submit', function(d) {
+					$('#resource_availability_from').val(moment(d).format('YYYY-MM-DD HH:mm:ss'));
+					Materialize.updateTextFields();
+				});
+				
+				resource_availability_to = new MaterialDatetimePicker({}).on('submit', function(d) {
+					$('#resource_availability_to').val(moment(d).format('YYYY-MM-DD HH:mm:ss'));
+					Materialize.updateTextFields();
+				});			
+			}
+			
+			function datetimepicker_from(v) {
+				if(v!='') resource_availability_from.value = moment(v);
+				resource_availability_from.open();
+			}
+			
+			function datetimepicker_to(v) {
+				if(v!='') resource_availability_to.value = moment(v);
+				resource_availability_to.open();
+			}
+			//========================================================================================================================= Datepicker End
+			//========================================================================================================================= Datatables Start
+			$(document).on("click", "[type=search]", function(e){
+				if(e.offsetX > 290) {
+					var t = '#'+$(this).val('').attr('aria-controls');
+					$(t).DataTable().search('').draw();
+				}
+			});
+			//========================================================================================================================= Datatables End
+			//========================================================================================================================= Google Map Start
+			var mapready = false;
+			var geocoder;
+			function initMap() {
+				mapready = true;
+				geocoder = new google.maps.Geocoder();
+			}
+			
+			function getAddressByCoordinate(latLng, callback) {
+				geocoder.geocode({
+					'latLng': latLng
+				}, function(results, status) {
+					if(status == google.maps.GeocoderStatus.OK) {
+						callback(results[0].formatted_address);
+					}
+					else {
+						callback('Cannot detect');
+					}
+				});
+			}
+			//========================================================================================================================= Google Map End
+			//========================================================================================================================= Firebase Start
+			var fireEvent = firebase.database().ref('fireEvent');
+			
+			fireEvent.on('value', function(data) {
+				getStat();
+				if ($('#activeCallcard').size()) getActiveCallcard();
+				if ($('#dtCallcard').size()) dtCallcard.ajax.reload(null, false);
+				if ($('#dtResource').size()) dtResource.ajax.reload(null, false);
+				if ($('#dtResponder').size()) dtResponder.ajax.reload(null, false);
+			});
+
+			$(document).ajaxSuccess(function(event, xhr, settings) {
+				if (
+					settings.url.indexOf("setCallcard.php")>-1 ||
+					settings.url.indexOf("setResource.php")>-1 ||
+					settings.url.indexOf("setResourceFromExcel.php")>-1 ||
+					settings.url.indexOf("setResponder.php")>-1 ||
+					settings.url.indexOf("setResponderStatus.php")>-1
+				)	fireEvent.set(Date.now());
+			});
+			//========================================================================================================================= Firebase End
+			//========================================================================================================================= Import Excel Start
+			function addResourceBatch() {
+				$('#modal_import form')[0].reset();
+				$('#importResult').html('Waiting for user action...<a href="javascript:;" class="downloadReport"><i class="material-icons">file_download</i></a>');
+				$('#modal_import').modal('open');
+			}
+			
+			function downloadReport(fileurl) {
+				window.location = fileurl;
+			}
+			
+			var X = XLSX;
+			function importExcel() {
+				var files = $('#importExcel')[0].files;
+				var i, f;
+				for (i = 0; i != files.length; ++i) {
+					f = files[i];
+					var reader = new FileReader();
+					var name = f.name;
+					reader.onload = function(e) {
+						var data = e.target.result;
+						var workbook;
+						workbook = XLSX.read(data, {type: 'binary'});
+						output = JSON.stringify(to_json(workbook), 2, 2);
+
+						$.ajax({
+							type: "POST",
+							dataType: "json",
+							url: "api/setResourceFromExcel.php",
+							data: to_json(workbook),
+							success: function(data){
+								if(data.status!='ok') modalSimple(data.status);
+								else {
+									$('#importResult').html('Data received: '+data.received+', Success: '+data.success+', Duplicate: '+data.duplicate+', Error: '+data.error+'<a href="javascript:;" class="downloadReport active tooltipped" data-position="left" data-delay="50" data-tooltip="Download Report" onclick="downloadReport(\''+data.fileurl+'\')"><i class="material-icons">file_download</i></a>');
+									$('.tooltipped').tooltip({delay: 50, html: true});
+								}
+							},
+							error: function(e){
+								modalSimple(e.message);
+							}
+						});
+					};
+					reader.readAsBinaryString(f);
+				}
+			}
+			
+			function to_json(workbook) {
+				var result = {};
+				workbook.SheetNames.forEach(function(sheetName) {
+					var roa = X.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+					if(roa.length > 0) {
+						//result[sheetName] = roa;
+						result['excel'] = roa;
+					}
+				});
+				return result;
+			}
+			//========================================================================================================================= Import Excel End
+			//========================================================================================================================= Check Jurisdiction Start
+			function withinJurisdiction(coordinate) {
+				var result = false;
+				$('.pinTypeVenue').each(function(){
+					if(distance(coordinate, $(this).attr('coordinate')) <= 0.5) result = true;
+				});
+				if($('.pinTypeVenue').size()==0) result = true;
+				
+				return result;
+			}
+			
+			function distance(coordinateFrom, coordinateTo) {
+				var rad = Math.PI / 180;
+				
+				var latitudeFrom = coordinateFrom.split(',')[0].trim();
+				var longitudeFrom = coordinateFrom.split(',')[1].trim();
+				var latitudeTo = coordinateTo.split(',')[0].trim();
+				var longitudeTo = coordinateTo.split(',')[1].trim();
+				
+				var theta = longitudeFrom - longitudeTo;
+				var dist = Math.sin(latitudeFrom * rad) * Math.sin(latitudeTo * rad) +  Math.cos(latitudeFrom * rad) * Math.cos(latitudeTo * rad) * Math.cos(theta * rad);
+
+				return Math.acos(dist) / rad * 60 *  1.852;
+			}
+			//========================================================================================================================= Check Jurisdiction End
+			//========================================================================================================================= Change Setting Start
+			function openModalName() {
+				$('#modal_change_name #desiredname').val(profile.user_fullname);
+				Materialize.updateTextFields();
+				$('#modal_change_name').modal('open');
+			}
+			
+			function openModalPassword() {
+				$('#modal_change_login form')[0].reset();
+				Materialize.updateTextFields();
+				$('#modal_change_login').modal('open');
+			}
+			
+			function updateName() {
+				$.getJSON("api/setName.php", {'username':profile.user_username, 'desiredname':$('#desiredname').val().toUpperCase()}, function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						if(data.close) {
+							$('#modal_change_name').modal('close');
+							profile.user_fullname = $('#desiredname').val().toUpperCase();
+							$('[id=user_fullname]').text(profile.user_fullname);
+							localStorage.setItem('1cc_profile', JSON.stringify(profile));
+						}
+						modalSimple(data.message);
+					}
+				});
+			}
+			
+			function updatePassword() {
+				$.getJSON("api/setPassword.php", {'username':profile.user_username, 'old_password':$('#old_password').val(), 'new_password':$('#new_password').val()}, function(data) {
+					if(data.status!='ok') {
+						Materialize.toast(data.status, 4000);
+					}
+					else {
+						if(data.close) $('#modal_change_login').modal('close');
+						modalSimple(data.message);
+					}
+				});
+			}
+			//========================================================================================================================= Change Setting End
+			//========================================================================================================================= Autocomplete Start
+			var ac_eventcode;
+			function getEventCode() {
+				$.ajax({
+					type: "POST",
+					dataType: "json",
+					url: "api/getEventCode.php",
+					success: function(data){
+						if(data.status!='ok') {
+							Materialize.toast(data.status, 4000);
+						}
+						else {
+							var eventCode = [{'eventcode_code': '', 'desc': ''}];
+							for(var i in data.data) eventCode.push({'eventcode_code':data.data[i].eventcode_code, 'desc':data.data[i].eventcode_desc});
+							
+							var _ac = $('#callcard_eventcode_code').selectize({
+								valueField: 'eventcode_code',
+								searchField: ['eventcode_code', 'desc'],
+								options: eventCode,
+								render: {
+									item: function(item, escape) {
+										if(item.eventcode_code=='') return '';
+										else return '<div><span class="eventcode">' + item.eventcode_code + ' - </span>' + item.desc + '</div>';
+									},
+									option: function(item, escape) {
+										if(item.eventcode_code=='') return '<div style="display:none;"></div>';
+										else return '<div><span class="eventcode">' + item.eventcode_code + ' - </span>' + item.desc + '</div>';
+									}
+								}
+							});
+							
+							ac_eventcode = _ac[0].selectize;
+						}
+					}
+				});
+			}
+			//========================================================================================================================= Autocomplete End
+		</script>
+		<script async defer src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBC9tB8qEJYuATxKfjjlW5euBAaTxJjhVU&libraries=places&callback=initMap'></script>
+	</body>
+</html>
